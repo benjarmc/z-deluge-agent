@@ -10,3 +10,6 @@ node_modules/
 .idea/
 .vscode/
 *.log
+
+# Referencia local (no parte del proyecto)
+zoho-deluge-toolkit/

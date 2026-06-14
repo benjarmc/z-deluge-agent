@@ -1,0 +1,26 @@
+{
+  "name": "z-deluge-agent",
+  "owner": {
+    "name": "benjarmc",
+    "email": "benjamin@dconquest.io"
+  },
+  "description": "Toolkit de documentación y 10 skills para el universo Zoho: Deluge, Creator, Client Scripts, COQL, Widgets, Integration Tasks, APIs REST y Analytics SQL.",
+  "plugins": [
+    {
+      "name": "z-deluge-agent",
+      "source": "./plugins/z-deluge-agent",
+      "description": "10 skills modulares para escribir, revisar y depurar código en el ecosistema Zoho.",
+      "category": "development",
+      "keywords": [
+        "zoho",
+        "deluge",
+        "zoho-creator",
+        "zoho-crm",
+        "coql",
+        "widgets",
+        "analytics-sql",
+        "apis"
+      ]
+    }
+  ]
+}
