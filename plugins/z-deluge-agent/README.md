@@ -1,27 +1,29 @@
 # Z Deluge Agent — Plugin
 
-Toolkit de skills y documentación para el ecosistema Zoho completo.
+Bilingual (EN/ES) skills and documentation toolkit for the full Zoho ecosystem.
 
-## Skills incluidos (10)
+Toolkit bilingüe (EN/ES) de skills y documentación para el ecosistema Zoho.
 
-| # | Skill | Dominio |
-|---|-------|---------|
-| 1 | `zoho-deluge-core` | Lenguaje Deluge, invokeUrl, sintaxis base |
-| 2 | `zoho-deluge-creator` | Formularios, páginas, subforms, Custom APIs, API v2.1 |
-| 3 | `zoho-crm-client-script` | Client Scripts JavaScript en CRM |
-| 4 | `zoho-crm-coql` | COQL — CRM Object Query Language v8 |
-| 5 | `zoho-widgets-crm` | Widgets embebidos en CRM |
-| 6 | `zoho-widgets-creator` | Widgets embebidos en Creator |
-| 7 | `zoho-integration-tasks` | Tasks nativas `zoho.*` (24 servicios) |
-| 8 | `zoho-public-apis` | APIs REST OAuth: CRM v8, Books, Desk, etc. |
-| 9 | `zoho-analytics-sql` | SQL en Zoho Analytics, CloudSQL API |
-| 10 | `zoho-patterns` | Null safety, límites, troubleshooting producción |
+## Skills (10)
 
-## Documentación de referencia
+| # | Skill | Domain / Dominio |
+|---|-------|------------------|
+| 1 | `zoho-deluge-core` | Deluge language / Lenguaje Deluge |
+| 2 | `zoho-deluge-creator` | Creator forms, pages, Custom APIs |
+| 3 | `zoho-crm-client-script` | CRM Client Scripts (JavaScript) |
+| 4 | `zoho-crm-coql` | COQL v8 |
+| 5 | `zoho-widgets-crm` | CRM widgets |
+| 6 | `zoho-widgets-creator` | Creator widgets |
+| 7 | `zoho-integration-tasks` | Native `zoho.*` tasks (24 services) |
+| 8 | `zoho-public-apis` | REST OAuth: CRM v8, Books, Desk |
+| 9 | `zoho-analytics-sql` | Analytics SQL, CloudSQL API |
+| 10 | `zoho-patterns` | Null safety, limits, troubleshooting |
 
-Los skills apuntan a la carpeta `docs/` en la raíz del repositorio. Índice: [`docs/INDEX.md`](../../docs/INDEX.md).
+Each skill: `SKILL.md` (loaded by the agent; bilingual YAML; replies in the user's language), `SKILL.en.md` (full English body), `reference.md` (EN + ES doc pointers).
 
-## Instalación (Claude Code)
+Docs: [`docs/INDEX.md`](../../docs/INDEX.md) · [`docs/en/`](../../docs/en/) · [`docs/es/`](../../docs/es/)
+
+## Install (Claude Code)
 
 ```
 /plugin marketplace add benjarmc/z-deluge-agent
@@ -29,36 +31,21 @@ Los skills apuntan a la carpeta `docs/` en la raíz del repositorio. Índice: [`
 /reload-plugins
 ```
 
-## Uso en Cursor
+## Cursor
 
-Los skills están disponibles en `.cursor/skills/` del repositorio. Cursor los descubre automáticamente al trabajar en este proyecto.
+Skills live in `.cursor/skills/`. Ask in English or Spanish.
 
-Invocación por dominio — ejemplos:
+Examples:
 
-- "Revisa este script Deluge de Creator" → `zoho-deluge-creator`
-- "Client Script para validar RFC en CRM" → `zoho-crm-client-script`
-- "Query COQL para deals abiertos" → `zoho-crm-coql`
-- "Widget CRM que actualice un contacto" → `zoho-widgets-crm`
-- "Widget Creator con zet pack" → `zoho-widgets-creator`
-- "Integrar CRM v8 con OAuth desde Deluge" → `zoho-public-apis`
-- "Query Table ventas por región" → `zoho-analytics-sql`
+- "Review this Creator Deluge script" / "Revisa este script Deluge de Creator" → `zoho-deluge-creator`
+- "Client Script to validate RFC" → `zoho-crm-client-script`
+- "COQL for open deals" → `zoho-crm-coql`
 
-## Estructura
+## Layout
 
 ```
 plugins/z-deluge-agent/
 ├── .claude-plugin/plugin.json
 └── skills/
-    ├── zoho-deluge-core/
-    ├── zoho-deluge-creator/
-    ├── zoho-crm-client-script/
-    ├── zoho-crm-coql/
-    ├── zoho-widgets-crm/
-    ├── zoho-widgets-creator/
-    ├── zoho-integration-tasks/
-    ├── zoho-public-apis/
-    ├── zoho-analytics-sql/
-    └── zoho-patterns/
+    └── zoho-*/SKILL.md + SKILL.en.md + reference.md
 ```
-
-Cada skill contiene `SKILL.md` (guía operativa) y `reference.md` (punteros a docs completas).

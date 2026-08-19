@@ -1,87 +1,71 @@
-# Manifest de Knowledge — Custom GPT / Proyecto ChatGPT
+# Knowledge manifest — Custom GPT / ChatGPT Project
 
-Lista de archivos del repositorio para subir como **Knowledge** en un Custom GPT o adjuntar a un **Proyecto** de ChatGPT.
+Files to upload as **Knowledge**. Custom GPT limit: **20 files**. This list uses **14** (pick **one language**).
 
-Límite Custom GPT: **20 archivos**. Este manifest usa **14** (margen para notas propias).
+[Español](knowledge-manifest.es.md)
 
----
-
-## Archivos a subir (en este orden)
-
-| # | Ruta en repo | Dominio | Prioridad |
-|---|--------------|---------|-----------|
-| 1 | `docs/INDEX.md` | Índice maestro | ⭐ Esencial |
-| 2 | `docs/patterns/production.md` | Patrones / troubleshooting | ⭐ Esencial |
-| 3 | `docs/deluge/language.md` | Deluge general | ⭐ Esencial |
-| 4 | `docs/creator/deluge-in-creator.md` | Deluge Creator | Alta |
-| 5 | `docs/client-script/crm.md` | Client Scripts CRM | Alta |
-| 6 | `docs/coql/crm-coql.md` | COQL | Alta |
-| 7 | `docs/widgets/crm.md` | Widgets CRM | Media |
-| 8 | `docs/widgets/creator.md` | Widgets Creator | Media |
-| 9 | `docs/integration-tasks/index.md` | Integration tasks (24 servicios) | Alta |
-| 10 | `docs/apis/crm-v8.md` | REST CRM v8 | Alta |
-| 11 | `docs/apis/books.md` | REST Books | Media |
-| 12 | `docs/apis/desk.md` | REST Desk | Media |
-| 13 | `docs/apis/other-products.md` | REST otros productos | Media |
-| 14 | `docs/analytics/sql.md` | Analytics SQL | Media |
-
-### No subir (legacy / redundante)
-
-| Archivo | Motivo |
-|---------|--------|
-| `docs/widgets/crm-creator.md` | Reemplazado por `widgets/crm.md` + `widgets/creator.md` |
-| `plugins/**/SKILL.md` | Ya condensados en docs/ + gpt-system-prompt.md |
-| `zoho-deluge-toolkit/` | Referencia externa, no parte del proyecto |
+Upload either `docs/en/` **or** `docs/es/` — not both (that would exceed the 20-file cap).
 
 ---
 
-## Setup paso a paso — Custom GPT
+## Files to upload (this order)
+
+Replace `LANG` with `en` or `es`.
+
+| # | Path | Domain | Priority |
+|---|------|--------|----------|
+| 1 | `docs/INDEX.md` | Master index (bilingual) | Essential |
+| 2 | `docs/LANG/patterns/production.md` | Patterns / troubleshooting | Essential |
+| 3 | `docs/LANG/deluge/language.md` | Deluge core | Essential |
+| 4 | `docs/LANG/creator/deluge-in-creator.md` | Creator Deluge | High |
+| 5 | `docs/LANG/client-script/crm.md` | CRM Client Scripts | High |
+| 6 | `docs/LANG/coql/crm-coql.md` | COQL | High |
+| 7 | `docs/LANG/widgets/crm.md` | CRM widgets | Medium |
+| 8 | `docs/LANG/widgets/creator.md` | Creator widgets | Medium |
+| 9 | `docs/LANG/integration-tasks/index.md` | Integration tasks (24 services) | High |
+| 10 | `docs/LANG/apis/crm-v8.md` | CRM v8 REST | High |
+| 11 | `docs/LANG/apis/books.md` | Books REST | Medium |
+| 12 | `docs/LANG/apis/desk.md` | Desk REST | Medium |
+| 13 | `docs/LANG/apis/other-products.md` | Other products REST | Medium |
+| 14 | `docs/LANG/analytics/sql.md` | Analytics SQL | Medium |
+
+### Do not upload
+
+| File | Why |
+|------|-----|
+| `docs/es/widgets/crm-creator.md` | Legacy — use `widgets/crm.md` + `widgets/creator.md` |
+| `plugins/**/SKILL.md` | Already condensed in docs + system prompt |
+| `zoho-deluge-toolkit/` | External reference |
+
+---
+
+## Custom GPT setup
 
 1. ChatGPT → **Explore GPTs** → **Create**
 2. **Name:** `Zoho Deluge Agent`
-3. **Description:** Experto en Deluge, Creator, Client Scripts CRM, COQL, Widgets, APIs Zoho y Analytics SQL.
-4. **Instructions:** copiar contenido de [`gpt-system-prompt.md`](gpt-system-prompt.md) (desde "Eres **Zoho Deluge Agent**...")
-5. **Knowledge:** subir los 14 archivos de la tabla (arrastrar desde `docs/`)
-6. **Capabilities:** activar **Code Interpreter** si quieres validar JSON/SQL; **Web Browsing** opcional para docs oficiales recientes
-7. **Actions:** no requeridas (Knowledge es estático)
-8. Guardar como **Only me** o **Anyone with link** según prefieras
+3. **Description:** Expert in Deluge, Creator, CRM Client Scripts, COQL, Widgets, Zoho APIs, and Analytics SQL (EN/ES).
+4. **Instructions:** paste [`gpt-system-prompt.md`](gpt-system-prompt.md) (English) or [`gpt-system-prompt.es.md`](gpt-system-prompt.es.md) (Spanish)
+5. **Knowledge:** upload the 14 files for **one** language
+6. **Capabilities:** Code Interpreter optional; Web Browsing optional for official docs
+7. Save
 
----
+## ChatGPT Project setup
 
-## Setup — Proyecto ChatGPT (Plus/Pro)
+1. Create project **Zoho Deluge Agent**
+2. Project instructions: paste the matching system prompt
+3. Attach the 14 `.md` files
+4. New chats in the project inherit that knowledge
 
-1. Crear proyecto **Zoho Deluge Agent**
-2. Custom instructions del proyecto: pegar `gpt-system-prompt.md`
-3. Adjuntar los 14 `.md` al proyecto (quedan como contexto persistente)
-4. En cada chat nuevo del proyecto, el contexto ya incluye los docs
-
----
-
-## Si te quedas sin slots (20 archivos)
-
-Prioridad mínima viable (7 archivos):
+## If you only have 7 slots
 
 1. `docs/INDEX.md`
-2. `docs/patterns/production.md`
-3. `docs/deluge/language.md`
-4. `docs/creator/deluge-in-creator.md`
-5. `docs/client-script/crm.md`
-6. `docs/integration-tasks/index.md`
-7. `docs/apis/crm-v8.md`
+2. `docs/LANG/patterns/production.md`
+3. `docs/LANG/deluge/language.md`
+4. `docs/LANG/creator/deluge-in-creator.md`
+5. `docs/LANG/client-script/crm.md`
+6. `docs/LANG/integration-tasks/index.md`
+7. `docs/LANG/apis/crm-v8.md`
 
-Añade `coql/crm-coql.md` y `widgets/*.md` según tu uso principal.
+## Updating Knowledge
 
----
-
-## Actualizar Knowledge
-
-Cuando actualices el repo:
-
-1. Regenera o re-sube los `.md` modificados en el Custom GPT (Edit → Knowledge → replace file)
-2. Los Custom GPT **no** se sincronizan solos con GitHub — hay que subir manualmente o vía API de Assistants
-
----
-
-## Alternativa: API OpenAI Assistants
-
-Para sync programático, usa la [Assistants API](https://platform.openai.com/docs/assistants/overview) con `file_ids` apuntando a los mismos 14 archivos. Requiere backend propio; no es el flujo UI de Custom GPT.
+Re-upload changed `.md` files. Custom GPTs do **not** auto-sync from GitHub.

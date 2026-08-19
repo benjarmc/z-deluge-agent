@@ -1,7 +1,7 @@
-# Referencia — zoho-crm-client-script
+# Reference / Referencia — zoho-crm-client-script
 
-| Tema | Archivo |
-|------|---------|
-| Client Scripts CRM | `docs/client-script/crm.md` |
-| Patrones | `docs/patterns/production.md` |
-| Índice | `docs/INDEX.md` |
+| Topic / Tema | EN | ES |
+|--------------|----|----|
+| CRM Client Scripts | `docs/en/client-script/crm.md` | `docs/es/client-script/crm.md` |
+| Patterns / Patrones | `docs/en/patterns/production.md` | `docs/es/patterns/production.md` |
+| Index / Índice | `docs/INDEX.md` | `docs/INDEX.md` |

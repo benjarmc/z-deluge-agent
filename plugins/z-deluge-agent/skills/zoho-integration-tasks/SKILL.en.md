@@ -1,0 +1,716 @@
+---
+name: zoho-integration-tasks
+description: Uses and debugs ~260 native Deluge integration tasks across 24 Zoho services (zoho.crm, zoho.creator, zoho.books, zoho.desk, zoho.sign, zoho.writer, etc.). Use for zoho.* tasks, createRecord/getRecords, task vs invokeUrl. / Usa y depura las ~260 integration tasks nativas de Deluge en 24 servicios Zoho. Usar para zoho.* tasks, createRecord getRecords, task vs invokeUrl.
+---
+
+# Integration Tasks — `zoho.*` (24 services)
+
+## Language / Idioma
+
+Reply in the user's language (English or Spanish). Code identifiers, API names, and Zoho product names stay in English.
+Responde en el idioma del usuario (inglés o español). Identificadores de código, nombres de API y productos Zoho permanecen en inglés.
+
+Canonical docs: `docs/en/` (English) · `docs/es/` (Español)
+
+Native Deluge tasks for communication between Zoho products.
+
+```deluge
+zoho.<servicio>.<accion>(parámetros)
+```
+
+**Exhaustive index:** `docs/en/integration-tasks/index.md` · `docs/es/integration-tasks/index.md`  
+**Core language:** skill `zoho-deluge-core`  
+**REST alternative:** skill `zoho-public-apis`
+
+---
+
+## Summary by service
+
+| Service | Prefix | Tasks |
+|----------|---------|-------|
+| CRM V8 | `zoho.crm.v8` | 13 |
+| CRM Vertical Solutions | `zoho.crm` | 7 |
+| Creator V2 | `zoho.creator` | 5 |
+| Creator V2.1 | `zoho.creator.v2_1` | 6 |
+| Books | `zoho.books` | 7 |
+| Desk | `zoho.desk` | 12 |
+| One | `zoho.one` | 14 |
+| Inventory | `zoho.inventory` | 6 |
+| Invoice | `zoho.invoice` | 4 |
+| Billing | `zoho.billing` | 5 |
+| People | `zoho.people` | 4 |
+| Projects | `zoho.projects` | 9 |
+| Recruit | `zoho.recruit` | 6 |
+| Cliq | `zoho.cliq` | 13 |
+| Mail | `zoho.mail` | 11 |
+| Calendar | `zoho.calendar` | 1 |
+| Sign | `zoho.sign` | 9 |
+| Writer | `zoho.writer` | 22 |
+| Sheet | `zoho.sheet` | 7 |
+| WorkDrive | `zoho.workdrive` | 3 |
+| Analytics | `zoho.analytics` | 3 |
+| Bookings | `zoho.bookings` | 6 |
+| Connect | `zoho.connect` | 10 |
+| Map | `zoho.map` | 3 |
+| Notebook | `zoho.notebook` | 1 |
+| SalesIQ | `zoho.salesiq` | 2 |
+| SDP Cloud | `zoho.sdpcloud` | 6 |
+
+---
+
+## All tasks by service
+
+## Zoho CRM Integration Tasks V8 (`zoho.crm.v8.*`)
+
+> Index: https://www.zoho.com/deluge/help/crm-integration-tasks-V8.html  
+> Standard CRM CRUD (API v8). **Do not** mix with Vertical Solutions.
+
+Each execution with a response = 1 External Call (`for each` × 5 = 5 calls). `connection` required in Cliq. Parameters are positional.
+
+| Help | Deluge |
+|------|--------|
+| Create Record | `zoho.crm.v8.createRecord(module, data, [options], [connection])` |
+| Get Records | `zoho.crm.v8.getRecords(module, [query], [page], [perPage], [connection])` |
+| Search Records | `zoho.crm.v8.searchRecords(module, criteria, [page], [perPage], [searchValue], [connection])` |
+| Get Record By ID | `zoho.crm.v8.getRecordById(module, recordId, [query], [connection])` |
+| Update Record | `zoho.crm.v8.updateRecord(module, recordId, data, [options], [connection])` |
+| Bulk Create Records | `zoho.crm.v8.bulkCreate(module, dataList, [options], [connection])` |
+| Bulk Update Records | `zoho.crm.v8.bulkUpdate(module, dataList, [options], [connection])` |
+| Get Related Records | `zoho.crm.v8.getRelatedRecords(relation, parentModule, recordId, [query], [page], [perPage], [connection])` |
+| Update Related Record | `zoho.crm.v8.updateRelatedRecord(subModule, relatedId, parentModule, parentId, data, [connection])` |
+| Convert Lead | `zoho.crm.v8.convertLead(leadId, [values], [connection])` |
+| Upsert Record | `zoho.crm.v8.upsert(module, data, [duplicateCheck], [connection])` |
+| Attach File | `zoho.crm.v8.attachFile(module, recordId, fileObject, [connection])` |
+| Get Fields | `zoho.crm.v8.getFields(module, [connection])` |
+
+Identifiers: `bulkCreate` / `bulkUpdate` / `upsert` (not `*Records`). `options.trigger`: `workflow`, `approval`, `blueprint`, `orchestration`.
+
+---
+
+## Zoho CRM Vertical Solutions (`zoho.crm.*`)
+
+> Index: https://www.zoho.com/deluge/help/crm-tasks.html  
+> **Only** extensions and Vertical CRM.
+
+| Help | Deluge |
+|------|--------|
+| Get User Data | `zoho.crm.getRecords("users", [page], [perPage], {"type": "ActiveUsers"})` |
+| Invoke Connector Task | `zoho.crm.invokeConnector("<connectorApiId>", parameterMap)` |
+| Set Organization Variable | `zoho.crm.invokeConnector("crm.set", {"apiname": "Score", "value": 50})` |
+| Get Organization Variable | `zoho.crm.getOrgVariable("Score")` |
+| Get Module Metadata | `zoho.crm.invokeConnector("crm.modulemetadata", {"module": "Leads"})` |
+| Get All Module Metadata | `zoho.crm.invokeConnector("crm.modulemetadata", Map())` |
+| Get Organization Information | `zoho.crm.invokeConnector("crm.getorg", Map())` |
+
+`zoho.loginuser` / `zoho.adminuserid` → skill `zoho-deluge-core` (not this index).
+
+---
+
+## Zoho Creator V2 (`zoho.creator.*`)
+
+> Index: https://www.zoho.com/deluge/help/creator-tasks.html  
+> Creator API v2. First parameter = **owner** (`zoho.adminuser`), not just the app link name.
+
+Each execution with a response = 1 External Call. Extra V2 billing:
+- **Same Creator account:** Developer API **and** External Calls are deducted from that account.
+- **Other service → Creator:** Developer API on the target Creator; External Calls on the sending service.
+- **Creator → another Creator:** Developer API on the target; External Calls on the sending Creator.
+
+`createRecord` accepts a Map (1 record) or a List (up to 200). There is **no** `createRecords` task in V2.
+
+| Help | Deluge |
+|------|--------|
+| Get Records | `zoho.creator.getRecords(owner, app, report, [criteria], [from], [limit], [connection])` |
+| Get Record by ID | `zoho.creator.getRecordById(owner, app, report, recordId, [connection])` |
+| Create Record | `zoho.creator.createRecord(owner, app, form, data, [otherParams], [connection])` |
+| Update Records | `zoho.creator.updateRecords(owner, app, report, criteria, data, [otherParams], [connection])` |
+| Update Record | `zoho.creator.updateRecord(owner, app, report, recordId, data, [otherParams], [connection])` |
+
+---
+
+## Zoho Creator V2.1 (`zoho.creator.v2_1.*`)
+
+> Index: https://www.zoho.com/deluge/help/creator-tasks-v2.1.html  
+> **Not** available from Zoho Creator. Prefix `v2_1`, not the V2 namespace.
+
+External Calls only (no V2 Developer API note). `configuration`: `environment` (`development`/`stage`), `skip_workflow`, `field_config`, `max_records`, `criteria`, `message`, `tasks`.
+
+| Help | Deluge |
+|------|--------|
+| Create Record | `zoho.creator.v2_1.createRecord(owner, app, form, data, [config], [connection])` |
+| Create Records | `zoho.creator.v2_1.createRecords(owner, app, form, dataList, [config], [connection])` |
+| Update Record by ID | `zoho.creator.v2_1.updateRecordById(owner, app, report, recordId, data, [config], [connection])` |
+| Update Records | `zoho.creator.v2_1.updateRecords(owner, app, report, data, [config], [connection])` |
+| Get Record by ID | `zoho.creator.v2_1.getRecordById(owner, app, report, recordId, [config], [connection])` |
+| Get Records | `zoho.creator.v2_1.getRecords(owner, app, report, [config], [connection])` |
+
+---
+
+## Zoho Books (`zoho.books.*`)
+
+> Index: https://www.zoho.com/deluge/help/books-tasks.html  
+> Each execution with a response = 1 External Call.
+
+| Help | Deluge |
+|------|--------|
+| Get Organizations | `zoho.books.getOrganizations([connection])` |
+| Create Record | `zoho.books.createRecord(module, orgId, data, [connection])` |
+| Update Record | `zoho.books.updateRecord(module, recordId, orgId, data, [connection])` |
+| Get Records | `zoho.books.getRecords(module, orgId, [connection])` |
+| Get Records By ID | `zoho.books.getRecordById(module, recordId, orgId, [connection])` |
+| Mark Status | `zoho.books.markStatus(module, recordId, orgId, status, [connection])` |
+| Get Templates | `zoho.books.getTemplates(module, orgId, [connection])` |
+
+**Modules:** `Contacts`, `Invoices`, `Estimates`, `SalesOrders`, `PurchaseOrders`, `Bills`, `Payments`, `Expenses`, `Items`, `CreditNotes`, `VendorCredits`, `Projects`, `Taxes`, `Journals`, `BankAccounts`, `ChartOfAccounts`. Nulls: `containsKey("custom_field_hash")`.
+
+---
+
+## Zoho Desk (`zoho.desk.*`)
+
+> Index: https://www.zoho.com/deluge/help/desk-tasks.html  
+> `orgId` comes **first**. Each execution with a response = 1 External Call.
+
+| Help | Deluge |
+|------|--------|
+| Get Records | `zoho.desk.getRecords(orgId, module, [from], [limit], [query], [connection])` |
+| Get Record By ID | `zoho.desk.getRecordById(orgId, module, recordId, [connection])` |
+| Create | `zoho.desk.create(orgId, module, data, [connection])` |
+| Update | `zoho.desk.update(orgId, module, recordId, data, [connection])` |
+| Search Records | `zoho.desk.searchRecords(orgId, module, criteria, [connection])` |
+| Get Related Records | `zoho.desk.getRelatedRecords(orgId, module, recordId, subModule, [connection])` |
+| Get Related Record By ID | `zoho.desk.getRelatedRecordById(orgId, module, recordId, subModule, relId, [connection])` |
+| Create Related Record | `zoho.desk.createRelatedRecord(orgId, module, recordId, subModule, data, [connection])` |
+| Update Related Record | `zoho.desk.updateRelatedRecord(orgId, module, recordId, subModule, relId, data, [connection])` |
+| Move | `zoho.desk.move(orgId, ticketId, deptId, [connection])` |
+| Split | `zoho.desk.split(orgId, ticketId, data, [connection])` |
+| Merge | `zoho.desk.merge(orgId, ticketIds, [connection])` |
+
+Official modules: `tickets`, `contacts`, `accounts`, `tasks`, `products`, `contracts` (+ `agents`, `departments` on getRecords).
+
+---
+
+## Zoho One (`zoho.one.*`)
+
+> Index: https://www.zoho.com/deluge/help/one-tasks.html  
+> Applies to **all services except Zoho Creator**. Each execution with a response = 1 External Call.
+
+| Help | Deluge |
+|------|--------|
+| Add User | `zoho.one.addUser(orgId, userData, connection)` |
+| Update User | `zoho.one.updateUser(orgId, userId, userData, connection)` |
+| Get User | `zoho.one.getUser(orgId, userId, [queryParams], connection)` |
+| Get Users | `zoho.one.getUsers(orgId, page, perPage, [queryParams], connection)` |
+| Activate User | `zoho.one.activateUser(orgId, userId, connection)` |
+| Deactivate User | `zoho.one.deactivateUser(orgId, userId, connection)` |
+| Get Designations | `zoho.one.getDesignations(orgId, page, perPage, connection)` |
+| Get Locations | `zoho.one.getLocations(orgId, page, perPage, connection)` |
+| Get Groups | `zoho.one.getGroups(orgId, page, perPage, connection)` |
+| Get Departments | `zoho.one.getDepartments(orgId, page, perPage, connection)` |
+| Add User to a Group | `zoho.one.addUserToGroup(orgId, groupId, userData, connection)` |
+| Get Groups for User | `zoho.one.getUserGroups(orgId, userId, page, perPage, connection)` |
+| Get Custom Fields | `zoho.one.getCustomFields(orgId, connection)` |
+| Remove User from a Group | `zoho.one.removeUserFromGroup(orgId, groupId, userId, connection)` |
+
+Get Groups for User → identifier `getUserGroups` (not `getGroupsForUser`).
+
+---
+
+## Zoho Inventory (`zoho.inventory.*`)
+
+> Ref: https://www.zoho.com/deluge/help/inventory-tasks.html
+
+| Task | Description |
+|------|-------------|
+| `zoho.inventory.getOrganization()` | Gets associated organizations |
+| `zoho.inventory.getRecords(module, orgId)` | Gets records |
+| `zoho.inventory.getRecordById(module, recordId, orgId)` | Gets by ID |
+| `zoho.inventory.createRecord(module, orgId, data)` | Creates a record |
+| `zoho.inventory.updateRecord(module, recordId, orgId, data)` | Updates |
+| `zoho.inventory.markStatus(module, recordId, orgId, status)` | Changes status |
+
+**Modules:** `Contacts`, `Items`, `SalesOrders`, `Packages`, `Invoices`, `PurchaseOrders`, `Bills`, `Warehouses`, `Shipments`
+
+---
+
+## Zoho Invoice (`zoho.invoice.*`)
+
+> Ref: https://www.zoho.com/deluge/help/invoice-tasks.html
+
+| Task | Description |
+|------|-------------|
+| `zoho.invoice.getRecords(module, orgId)` | Gets records |
+| `zoho.invoice.getRecordById(module, recordId, orgId)` | Gets by ID |
+| `zoho.invoice.create(module, orgId, data)` | Creates a record |
+| `zoho.invoice.update(module, recordId, orgId, data)` | Updates |
+
+**Note:** Zoho Invoice was replaced by Zoho Billing (formerly Zoho Subscriptions) for recurring billing. Invoice is still available for simple invoices.
+
+---
+
+## Zoho Billing (`zoho.billing.*`)
+
+> Ref: https://www.zoho.com/deluge/help/billing-tasks.html  
+> (formerly known as Zoho Subscriptions)
+
+| Task | Description |
+|------|-------------|
+| `zoho.billing.getOrganization()` | Gets associated organizations |
+| `zoho.billing.getList(module, orgId)` | Gets a list of records |
+| `zoho.billing.retrieve(module, recordId, orgId)` | Gets by ID |
+| `zoho.billing.create(module, orgId, data)` | Creates a record |
+| `zoho.billing.update(module, recordId, orgId, data)` | Updates |
+
+**Modules:** `Customers`, `Subscriptions`, `Plans`, `Addons`, `Coupons`, `Invoices`, `Payments`, `Products`
+
+---
+
+## Zoho People (`zoho.people.*`)
+
+> Ref: https://www.zoho.com/deluge/help/people-tasks.html
+
+| Task | Description |
+|------|-------------|
+| `zoho.people.getRecords(module)` | Gets records from the module |
+| `zoho.people.create(module, data)` | Creates a record |
+| `zoho.people.getRecordById(module, recordId)` | Gets by ID |
+| `zoho.people.update(module, recordId, data)` | Updates a record |
+
+**Modules:** `employee`, `leave`, `attendance`, `form` (+ custom form name)
+
+---
+
+## Zoho Projects (`zoho.projects.*`)
+
+> Ref: https://www.zoho.com/deluge/help/projects-tasks.html
+
+| Task | Description |
+|------|-------------|
+| `zoho.projects.getPortals()` | Gets the user's portals |
+| `zoho.projects.getProjectDetails(portalId)` | Gets projects in the portal |
+| `zoho.projects.createProject(portalId, data)` | Creates a project |
+| `zoho.projects.getRecords(module, portalId, projectId)` | Gets records |
+| `zoho.projects.getRecordById(module, portalId, projectId, recordId)` | Gets by ID |
+| `zoho.projects.create(module, portalId, projectId, data)` | Creates a record |
+| `zoho.projects.update(module, portalId, projectId, recordId, data)` | Updates |
+| `zoho.projects.associateLogs(module, portalId, projectId, recordId, data)` | Associates a time log |
+| `zoho.projects.updateAssociatedLogs(module, portalId, projectId, recordId, logId, data)` | Updates a time log |
+
+**Modules:** `tasks`, `milestones`, `issues`, `forums`, `users`, `timesheets`
+
+---
+
+## Zoho Recruit (`zoho.recruit.*`)
+
+> Ref: https://www.zoho.com/deluge/help/recruit-tasks.html
+
+| Task | Description |
+|------|-------------|
+| `zoho.recruit.addRecords(module, data)` | Creates records |
+| `zoho.recruit.getRecordById(module, recordId)` | Gets by ID |
+| `zoho.recruit.getRecords(module, [page], [perPage])` | Gets records |
+| `zoho.recruit.searchRecords(module, criteria)` | Searches by criteria |
+| `zoho.recruit.updateRecord(module, recordId, data)` | Updates a record |
+| `zoho.recruit.uploadFile(module, recordId, file)` | Attaches a file |
+
+**Modules:** `JobOpenings`, `Candidates`, `Contacts`, `Clients`, `Applications`, `Interviews`
+
+---
+
+## Zoho Cliq (`zoho.cliq.*`)
+
+> Ref: https://www.zoho.com/deluge/help/cliq-tasks.html
+
+### Messaging
+
+| Task | Description |
+|------|-------------|
+| `zoho.cliq.postToChat(chatId, data)` | Posts a message in a chat |
+| `zoho.cliq.postToChatAsAdmin(chatId, data)` | Posts as admin |
+| `zoho.cliq.postToChannel(channelName, data)` | Posts in a channel |
+| `zoho.cliq.postToChannelAsAdmin(channelName, data)` | Posts in a channel as admin |
+| `zoho.cliq.postToBot(botName, data)` | Posts to a bot |
+| `zoho.cliq.postToBotAsAdmin(botName, data)` | Posts to a bot as admin |
+| `zoho.cliq.postToUser(emailOrZUID, data)` | Posts to a specific user |
+
+### Cliq Database
+
+| Task | Description |
+|------|-------------|
+| `zoho.cliq.createRecord(module, data)` | Creates a record |
+| `zoho.cliq.getRecords(module)` | Gets a list of records |
+| `zoho.cliq.getRecordById(module, recordId)` | Gets by ID |
+| `zoho.cliq.updateRecord(module, recordId, data)` | Updates |
+| `zoho.cliq.deleteRecord(module, recordId)` | Deletes by ID |
+| `zoho.cliq.deleteRecords(module, criteria)` | Deletes by criteria |
+
+---
+
+## Zoho Mail (`zoho.mail.*`)
+
+> Ref: https://www.zoho.com/deluge/help/mail-tasks.html  
+> **Note:** These tasks are NOT available in Zoho Creator.
+
+| Task | Description |
+|------|-------------|
+| `zoho.mail.getFolders(userId)` | Gets all folders |
+| `zoho.mail.moveToFolder(userId, mailId, folderId)` | Moves an email to a folder |
+| `zoho.mail.createFolder(userId, folderName)` | Creates a folder |
+| `zoho.mail.setFlag(userId, mailId)` | Flags an email |
+| `zoho.mail.removeFlag(userId, mailId)` | Removes the flag |
+| `zoho.mail.markAsRead(userId, mailId)` | Marks as read |
+| `zoho.mail.markAsUnread(userId, mailId)` | Marks as unread |
+| `zoho.mail.getMessage(userId, mailId)` | Gets email details |
+| `zoho.mail.createTag(userId, tagName)` | Creates a tag |
+| `zoho.mail.getLabels(userId)` | Gets all labels |
+| `zoho.mail.setTag(userId, mailId, tagId)` | Assigns a tag to an email |
+
+---
+
+## Zoho Calendar (`zoho.calendar.*`)
+
+> Ref: https://www.zoho.com/deluge/help/calendar-tasks.html
+
+| Task | Description |
+|------|-------------|
+| `zoho.calendar.createEvent(uid, data)` | Creates an event in Zoho Calendar |
+
+---
+
+## Zoho Sign (`zoho.sign.*`)
+
+> Ref: https://www.zoho.com/deluge/help/sign-tasks.html
+
+| Task | Description |
+|------|-------------|
+| `zoho.sign.createDocument(data)` | Uploads a document to Zoho Sign |
+| `zoho.sign.getDocumentById(documentId)` | Gets a document by ID |
+| `zoho.sign.updateDocument(documentId, data)` | Updates a document |
+| `zoho.sign.getFieldIds(documentId)` | Gets IDs of all fields |
+| `zoho.sign.downloadDocument(documentId)` | Downloads documents from Zoho Sign |
+| `zoho.sign.submitRequest(requestId)` | Submits the specified request |
+| `zoho.sign.getTemplates()` | Gets all templates |
+| `zoho.sign.getTemplateById(templateId)` | Gets a template by ID |
+| `zoho.sign.createUsingTemplate(templateId, data)` | Creates a document from a template |
+
+---
+
+## Zoho Writer (`zoho.writer.*`)
+
+> Ref: https://www.zoho.com/deluge/help/writer-tasks.html
+
+| Task | Description |
+|------|-------------|
+| `zoho.writer.getDocuments(criteria)` | Lists documents matching criteria |
+| `zoho.writer.uploadDocument(file)` | Uploads a document |
+| `zoho.writer.shareDocument(docId, data)` | Shares with collaborators by role |
+| `zoho.writer.getMergeFields(docId)` | Lists merge fields in the doc |
+| `zoho.writer.mergeAndSend(docId, data)` | Merges values and sends by email |
+| `zoho.writer.signDocument(docId, data)` | Sends for signature collection |
+| `zoho.writer.getAllFields(docId)` | Lists all fields in the doc |
+| `zoho.writer.mergeAndSign(docId, data)` | Merges and sends for signature |
+| `zoho.writer.mergeAndStoreV2(docId, data)` | Merges and stores in WorkDrive |
+| `zoho.writer.mergeAndInvoke(docId, data)` | Merges and invokes a custom function |
+| `zoho.writer.markUnmarkFavorite(docId, isFavorite)` | Marks/unmarks as favorite |
+| `zoho.writer.renameDocument(docId, newName)` | Renames the document |
+| `zoho.writer.enableDisableTrackChanges(docId, enable)` | Enables/disables track changes |
+| `zoho.writer.addUpdateDescription(docId, description)` | Adds/updates description |
+| `zoho.writer.lockUnlockDocument(docId, lock)` | Locks/unlocks the doc |
+| `zoho.writer.markDocumentReady(docId)` | Marks the document as ready |
+| `zoho.writer.markRevertFinal(docId, isFinal)` | Enables/disables editing |
+| `zoho.writer.getMergeTemplates()` | Lists merge templates |
+| `zoho.writer.getSignTemplates()` | Lists signature templates |
+| `zoho.writer.getFillableTemplates()` | Lists fillable templates |
+| `zoho.writer.v2SignDocument(docId, data)` | Sends for signature and tracks status |
+| `zoho.writer.generateFillableLink(docId, data)` | Generates a prefilled collection link |
+| `zoho.writer.mergeAndSendV2(docId, data)` | Merges and sends v2 |
+
+---
+
+## Zoho Sheet (`zoho.sheet.*`)
+
+> Ref: https://www.zoho.com/deluge/help/sheet-tasks.html
+
+| Task | Description |
+|------|-------------|
+| `zoho.sheet.getSheets(resourceId)` | Gets sheets in a file |
+| `zoho.sheet.createRecords(resourceId, sheetId, data)` | Inserts data into the sheet |
+| `zoho.sheet.getRecords(resourceId, sheetId)` | Gets data from the sheet |
+| `zoho.sheet.updateRecords(resourceId, sheetId, criteria, data)` | Updates rows |
+| `zoho.sheet.find(resourceId, sheetId, searchText)` | Finds specific text |
+| `zoho.sheet.replace(resourceId, sheetId, oldText, newText)` | Replaces all occurrences |
+| `zoho.sheet.insertCsv(resourceId, sheetId, csvData)` | Inserts CSV data into the sheet |
+
+---
+
+## Zoho WorkDrive (`zoho.workdrive.*`)
+
+> Ref: https://www.zoho.com/deluge/help/workdrive-tasks.html
+
+| Task | Description |
+|------|-------------|
+| `zoho.workdrive.uploadFile(folderId, file, fileName)` | Uploads a file to a folder |
+| `zoho.workdrive.createFolder(parentFolderId, folderName)` | Creates a subfolder |
+| `zoho.workdrive.createTeamFolder(teamId, folderName)` | Creates a team folder |
+
+REST `invokeurl` to `/workdrive/api/v1/files/{id}`: add `Accept: application/vnd.api+json` (JSON:API). See skill `zoho-public-apis`.
+
+---
+
+## Zoho Analytics (`zoho.analytics.*`)
+
+> Ref: https://www.zoho.com/deluge/help/analytics-tasks.html
+
+| Task | Description |
+|------|-------------|
+| `zoho.analytics.createRow(workspaceId, tableId, data)` | Creates a row in a table |
+| `zoho.analytics.deleteRow(workspaceId, tableId, criteria)` | Deletes rows by criteria |
+| `zoho.analytics.updateData(workspaceId, tableId, criteria, data)` | Updates data |
+
+---
+
+## Zoho Bookings (`zoho.bookings.*`)
+
+> Ref: https://www.zoho.com/deluge/help/bookings-tasks.html
+
+| Task | Description |
+|------|-------------|
+| `zoho.bookings.getWorkspaces()` | Gets all workspaces |
+| `zoho.bookings.getRecordById(module, recordId)` | Gets a record by ID |
+| `zoho.bookings.getRelatedRecords(module, recordId, subModule)` | Gets related records |
+| `zoho.bookings.getAvailableSlots(serviceId, staffId, date)` | Gets available slots |
+| `zoho.bookings.createAppointment(data)` | Creates an appointment |
+| `zoho.bookings.updateRecords(recordId, data)` | Updates a record by ID |
+
+---
+
+## Zoho Connect (`zoho.connect.*`)
+
+> Ref: https://www.zoho.com/deluge/help/connect-tasks.html
+
+| Task | Description |
+|------|-------------|
+| `zoho.connect.myNetworks()` | Gets all your networks |
+| `zoho.connect.myGroups()` | Gets all your groups |
+| `zoho.connect.addPost(networkId, data)` | Publishes content |
+| `zoho.connect.getPost(postId)` | Gets post content |
+| `zoho.connect.getPostByTPID(tpId)` | Gets a post by third-party ID |
+| `zoho.connect.updatePost(postId, data)` | Updates a post by ID |
+| `zoho.connect.deletePost(postId)` | Deletes a post by ID |
+| `zoho.connect.sendMePrivateMessage(networkId, data)` | Creates a private message |
+| `zoho.connect.addComment(postId, data)` | Adds a comment to a post |
+| `zoho.connect.addUsersToGroup(groupId, emails)` | Adds users to a group |
+
+---
+
+## Zoho Map (`zoho.map.*`)
+
+> Ref: https://www.zoho.com/deluge/help/map-tasks.html
+
+| Task | Description |
+|------|-------------|
+| `zoho.map.geocode(address)` | Returns GPS coordinates for an address |
+| `zoho.map.reverseGeocode(lat, lng)` | Returns an address from GPS coordinates |
+| `zoho.map.distanceBetween(address1, address2)` | Straight-line distance between addresses |
+
+---
+
+## Zoho Notebook (`zoho.notebook.*`)
+
+> Ref: https://www.zoho.com/deluge/help/notebook-tasks.html
+
+| Task | Description |
+|------|-------------|
+| `zoho.notebook.createNotecard(data)` | Creates a notecard with the specified content |
+
+---
+
+## Zoho SalesIQ (`zoho.salesiq.*`)
+
+> Ref: https://www.zoho.com/deluge/help/salesiq-tasks.html
+
+| Task | Description |
+|------|-------------|
+| `zoho.salesiq.visitorsession.set(key, value)` | Stores data temporarily during a chat |
+| `zoho.salesiq.visitorsession.get(key)` | Retrieves temporary chat data |
+
+---
+
+## SDP Cloud / ServiceDesk Plus (`zoho.sdpcloud.*`)
+
+> Ref: https://www.zoho.com/deluge/help/sdp-tasks.html
+
+| Task | Description |
+|------|-------------|
+| `zoho.sdpcloud.createRecord(module, data)` | Creates a record |
+| `zoho.sdpcloud.getRecords(module)` | Gets all records |
+| `zoho.sdpcloud.updateRecord(module, recordId, data)` | Updates |
+| `zoho.sdpcloud.getRecordById(module, recordId)` | Gets by ID |
+| `zoho.sdpcloud.associate(module, recordId, subModule, data)` | Associates a subrecord |
+| `zoho.sdpcloud.invokeUrl(url, method, headers, data)` | Invokes SDP-specific endpoints |
+
+---
+
+---
+
+## Native task vs invokeUrl
+
+| Use native task | Use invokeUrl |
+|------------------|----------------|
+| Documented CRM V8 CRUD (`zoho.crm.v8.*`) | Endpoint not covered by a task |
+| Documented Creator V2 / V2.1 | `record_cursor` or params the task does not expose |
+| OAuth managed by Zoho | COQL, bulk jobs, CRM settings |
+| Simple operations | Full header/body control |
+
+Creator V2.1 (`zoho.creator.v2_1.*`) already covers `skip_workflow`, `field_config`, `max_records` in `configuration`. Do **not** use those tasks **from** Creator.  
+COQL → skill `zoho-crm-coql`.
+
+---
+
+## Operational examples by service
+
+### CRM V8
+```deluge
+data = Map();
+data.put("Last_Name", "García");
+data.put("Email", "maria@empresa.com");
+resp = zoho.crm.v8.createRecord("Leads", data);
+results = zoho.crm.v8.searchRecords("Contacts", "(Email:equals:maria@empresa.com)");
+zoho.crm.v8.convertLead(leadId);
+fields = zoho.crm.v8.getFields("Contacts", "crm_connection");
+```
+
+### CRM Vertical Solutions (extensions / Vertical only)
+```deluge
+orgVar = zoho.crm.getOrgVariable("api_key");
+users = zoho.crm.getRecords("users", 1, 200, {"type": "ActiveUsers"});
+org = zoho.crm.invokeConnector("crm.getorg", Map());
+```
+
+### Creator V2
+```deluge
+empty = Map();
+resp = zoho.creator.createRecord(zoho.adminuser, zoho.appname, "Pedidos", payload, empty, "creator_oauth");
+rec = zoho.creator.getRecordById(zoho.adminuser, zoho.appname, "All_Pedidos", recordId, "creator_oauth");
+zoho.creator.updateRecord(zoho.adminuser, zoho.appname, "All_Pedidos", recordId, updateMap, empty, "creator_oauth");
+```
+
+### Creator V2.1 (not from Creator)
+```deluge
+cfg = Map();
+cfg.put("skip_workflow", {"form_workflow"});
+resp = zoho.creator.v2_1.createRecord("Shawn", "Task_Management", "Tasks", payload, cfg, "creator_oauth");
+```
+
+### Zoho One (not from Creator)
+```deluge
+userData = Map();
+userData.put("first_name", "John");
+userData.put("email_id", "john@zylker.com");
+zoho.one.addUser(orgId, userData, "zoho_one_connection");
+```
+
+### Books (requires orgId)
+```deluge
+orgs = zoho.books.getOrganizations();
+orgId = orgs.get("organizations").get(0).get("organization_id");
+inv = zoho.books.getRecordById("Invoices", invoiceId, orgId);
+if(inv.containsKey("custom_field_hash")) { cf = inv.get("custom_field_hash"); }
+```
+
+### Desk
+```deluge
+ticket = zoho.desk.create("tickets", orgId, ticketMap);
+zoho.desk.move(ticketId, deptId, orgId);
+zoho.desk.merge({ticketId1, ticketId2}, orgId);
+```
+
+### Sign
+```deluge
+resp = zoho.sign.createUsingTemplate(templateId, parameters);
+```
+
+### Writer (merge)
+```deluge
+zoho.writer.mergeAndSend(docId, mergeData);
+zoho.writer.mergeAndStoreV2(docId, data);
+```
+
+### Cliq
+```deluge
+zoho.cliq.postToChannel("general", {"text": "Alerta desde Deluge"});
+zoho.cliq.postToUser("user@empresa.com", {"text": "Notificación"});
+```
+
+### Projects
+```deluge
+portals = zoho.projects.getPortals();
+zoho.projects.create("tasks", portalId, projectId, taskData);
+```
+
+### Analytics
+```deluge
+zoho.analytics.createRow(workspaceId, tableId, rowData);
+```
+
+---
+
+## Null safety by service
+
+| Service | Validation |
+|----------|------------|
+| CRM | `!= null` |
+| Creator | `!= ""` |
+| Books/Inventory/Invoice | `containsKey("custom_field_hash")` |
+| Desk | `!= null` |
+| People | `!= null && != ""` |
+| Lookup (any) | `ifNull(rec.get("Lookup"), {"id":"","name":""})` |
+
+---
+
+## Cost and limits
+
+- Each task = **1 External Call**
+- Loop of N iterations = N calls
+- CRM integration: ~25,000/day
+- Creator: 50 calls/user/minute
+- Books/Inventory: 100/min/org
+
+Safe pagination → skill `zoho-patterns`.
+
+---
+
+## Base URLs (invokeUrl when a task is not enough)
+
+| Service | Base URL |
+|----------|----------|
+| CRM v8 | `https://www.zohoapis.com/crm/v8/` |
+| Creator v2.1 | `https://creator.zoho.com/api/v2.1/` |
+| Books v3 | `https://www.zohoapis.com/books/v3/` |
+| Desk v1 | `https://desk.zoho.com/api/v1/` |
+| Inventory v1 | `https://www.zohoapis.com/inventory/v1/` |
+| People v2 | `https://people.zoho.com/people/api/` |
+| Projects v3 | `https://projectsapi.zoho.com/restapi/portal/` |
+| Analytics v2 | `https://analyticsapi.zoho.com/api/v2/` |
+
+Regions: `.com`, `.eu`, `.in`, `.com.au`, `.jp`, `.ca`
+
+---
+
+## Troubleshooting
+
+| Error | Fix |
+|-------|-----|
+| Function returned null | Null safety per service |
+| INVALID_OAUTHTOKEN | Re-authorize the connection |
+| TOO_MANY_REQUESTS | Reduce calls, paginate, queue |
+| Module not found | Verify module API name |
+
+---
+
+## Full reference
+
+| Topic | File |
+|------|---------|
+| All tasks | `docs/en/integration-tasks/index.md` · `docs/es/integration-tasks/index.md` |
+| Patterns | `docs/en/patterns/production.md` · `docs/es/patterns/production.md` |
+| REST APIs | `docs/en/apis/` · `docs/es/apis/` |

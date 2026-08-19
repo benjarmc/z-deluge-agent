@@ -1,7 +1,7 @@
-# Referencia — zoho-crm-coql
+# Reference / Referencia — zoho-crm-coql
 
-| Tema | Archivo |
-|------|---------|
-| COQL completo | `docs/coql/crm-coql.md` |
-| CRM API v8 | `docs/apis/crm-v8.md` |
-| Patrones paginación | `docs/patterns/production.md` |
+| Topic / Tema | EN | ES |
+|--------------|----|----|
+| Full COQL | `docs/en/coql/crm-coql.md` | `docs/es/coql/crm-coql.md` |
+| CRM API v8 | `docs/en/apis/crm-v8.md` | `docs/es/apis/crm-v8.md` |
+| Pagination patterns | `docs/en/patterns/production.md` | `docs/es/patterns/production.md` |

@@ -1,8 +1,8 @@
-# Referencia — zoho-deluge-core
+# Reference / Referencia — zoho-deluge-core
 
-| Tema | Archivo |
-|------|---------|
-| Lenguaje Deluge completo | `docs/deluge/language.md` |
-| Integration tasks | `docs/integration-tasks/index.md` |
-| Patrones producción | `docs/patterns/production.md` |
-| Índice general | `docs/INDEX.md` |
+| Topic / Tema | EN | ES |
+|--------------|----|----|
+| Full Deluge language / Lenguaje Deluge | `docs/en/deluge/language.md` | `docs/es/deluge/language.md` |
+| Integration tasks | `docs/en/integration-tasks/index.md` | `docs/es/integration-tasks/index.md` |
+| Production patterns / Patrones | `docs/en/patterns/production.md` | `docs/es/patterns/production.md` |
+| Index / Índice | `docs/INDEX.md` | `docs/INDEX.md` |

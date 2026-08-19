@@ -1,48 +1,54 @@
 # Z Deluge Agent
 
-Documentación estructurada y skills de agente para todo el universo Zoho: **Deluge**, **Creator**, **Client Scripts CRM**, **COQL**, **Widgets**, **Integration Tasks**, **APIs REST** y **Analytics SQL**.
+Structured documentation and agent skills for the full Zoho universe: **Deluge**, **Creator**, **CRM Client Scripts**, **COQL**, **Widgets**, **Integration Tasks**, **REST APIs**, and **Analytics SQL**.
 
-Modelo inspirado en [zoho-deluge-toolkit](https://github.com/creatorscripts/zoho-deluge-toolkit), ampliado a CRM, COQL, widgets separados, integration tasks y APIs de múltiples productos.
+Inspired by [zoho-deluge-toolkit](https://github.com/creatorscripts/zoho-deluge-toolkit), extended to CRM, COQL, separate widgets, integration tasks, and multi-product APIs.
 
-## Skills (10 módulos)
+**Languages:** English (this file) · [Español](README.es.md)  
+Docs: [`docs/en/`](docs/en/) · [`docs/es/`](docs/es/)
 
-| # | Skill | Qué cubre |
-|---|-------|-----------|
-| 1 | `zoho-deluge-core` | Lenguaje Deluge, tipos, funciones, invokeUrl, variables zoho.* |
-| 2 | `zoho-deluge-creator` | Formularios, páginas, subforms, Custom APIs, API v2.1 |
-| 3 | `zoho-crm-client-script` | JavaScript cliente: eventos, ZDK, Web API, ZRC |
-| 4 | `zoho-crm-coql` | COQL CRM v8: sintaxis, límites, invokeUrl |
-| 5 | `zoho-widgets-crm` | Widgets HTML/JS en CRM (ZohoEmbededAppSDK) |
-| 6 | `zoho-widgets-creator` | Widgets Creator (widgetsdk, zet pack) |
-| 7 | `zoho-integration-tasks` | ~260 tasks `zoho.*` en 24 servicios |
-| 8 | `zoho-public-apis` | CRM v8, Books, Desk, OAuth, REST (sin COQL profundo) |
-| 9 | `zoho-analytics-sql` | SQL Analytics, Query Tables, CloudSQL API |
-| 10 | `zoho-patterns` | Null safety, límites API, troubleshooting |
+## Skills (10 modules)
 
-Ubicación: `plugins/z-deluge-agent/skills/` y `.cursor/skills/`
+| # | Skill | Covers |
+|---|-------|--------|
+| 1 | `zoho-deluge-core` | Deluge language, types, functions, invokeUrl, zoho.* variables |
+| 2 | `zoho-deluge-creator` | Forms, pages, subforms, Custom APIs, API v2.1 |
+| 3 | `zoho-crm-client-script` | Client-side JavaScript: events, ZDK, Web API, ZRC |
+| 4 | `zoho-crm-coql` | CRM v8 COQL: syntax, limits, invokeUrl |
+| 5 | `zoho-widgets-crm` | HTML/JS widgets in CRM (ZohoEmbededAppSDK) |
+| 6 | `zoho-widgets-creator` | Creator widgets (widgetsdk, zet pack) |
+| 7 | `zoho-integration-tasks` | ~260 `zoho.*` tasks across 24 services |
+| 8 | `zoho-public-apis` | CRM v8, Books, Desk, OAuth, REST (not deep COQL) |
+| 9 | `zoho-analytics-sql` | Analytics SQL, Query Tables, CloudSQL API |
+| 10 | `zoho-patterns` | Null safety, API limits, troubleshooting |
 
-## Documentación de referencia
+Location: `plugins/z-deluge-agent/skills/` and `.cursor/skills/`
+
+Each skill has `SKILL.md` (loaded by the agent; bilingual description; replies in the user's language) and `SKILL.en.md` (full English body).
+
+## Reference docs
 
 ```
 docs/
-├── INDEX.md                    ← índice maestro (10 dominios)
-├── deluge/language.md          ← lenguaje Deluge completo
-├── creator/deluge-in-creator.md
-├── client-script/crm.md
-├── coql/crm-coql.md            ← COQL (separado de crm-v8)
-├── widgets/crm.md              ← widgets CRM
-├── widgets/creator.md            ← widgets Creator
-├── integration-tasks/index.md
-├── apis/crm-v8.md | books.md | desk.md | other-products.md
-├── analytics/sql.md
-└── patterns/production.md
+├── INDEX.md                     ← bilingual hub
+├── en/                          ← English
+└── es/                          ← Spanish
+    ├── deluge/language.md
+    ├── creator/deluge-in-creator.md
+    ├── client-script/crm.md
+    ├── coql/crm-coql.md
+    ├── widgets/crm.md | creator.md
+    ├── integration-tasks/index.md
+    ├── apis/crm-v8.md | books.md | desk.md | other-products.md
+    ├── analytics/sql.md
+    └── patterns/production.md
 ```
 
-## Uso con Cursor
+## Cursor
 
-Al abrir este repositorio, Cursor carga los skills de `.cursor/skills/` automáticamente. Pide ayuda en lenguaje natural sobre cualquier tema Zoho — el agente selecciona el skill adecuado.
+Open this repository; Cursor loads `.cursor/skills/` automatically. Ask in English or Spanish — the agent picks the skill and replies in your language.
 
-## Uso con Claude Code (plugin)
+## Claude Code (plugin)
 
 ```
 /plugin marketplace add benjarmc/z-deluge-agent
@@ -50,27 +56,47 @@ Al abrir este repositorio, Cursor carga los skills de `.cursor/skills/` automát
 /reload-plugins
 ```
 
-## Uso con ChatGPT
+## Claude Desktop / Cowork (local plugin)
 
-ChatGPT no usa skills ni plugins nativos. Usa la carpeta [`chatgpt/`](chatgpt/):
+**Customize → Personal plugins → Upload local plugin:**
 
-1. Copia [`chatgpt/gpt-system-prompt.md`](chatgpt/gpt-system-prompt.md) → **Instructions** de un Custom GPT
-2. Sube los 14 archivos listados en [`chatgpt/knowledge-manifest.md`](chatgpt/knowledge-manifest.md) → **Knowledge**
-3. Guía completa: [`chatgpt/instructions.md`](chatgpt/instructions.md)
+1. Upload **`dist/z-deluge-agent.zip`**
+2. Enable **z-deluge-agent**
+3. Try: `/z-deluge-agent:zoho-deluge-creator`
 
-## Estructura del repositorio
+Generate the zip:
+
+```bash
+cd plugins/z-deluge-agent && zip -r ../../dist/z-deluge-agent.zip . -x "*.DS_Store"
+```
+
+Full guide: [`claude/upload-local-plugin.md`](claude/upload-local-plugin.md) · [Español](claude/upload-local-plugin.es.md)
+
+> Only `.zip` (not `.plugin`). The zip root must contain `.claude-plugin/` and `skills/`.
+
+## ChatGPT
+
+ChatGPT has no native skills/plugins. Use [`chatgpt/`](chatgpt/):
+
+1. Copy [`chatgpt/gpt-system-prompt.md`](chatgpt/gpt-system-prompt.md) → Custom GPT **Instructions**
+2. Upload **one language** of the 14 files listed in [`chatgpt/knowledge-manifest.md`](chatgpt/knowledge-manifest.md) (`docs/en/` or `docs/es/`)
+3. Guide: [`chatgpt/instructions.md`](chatgpt/instructions.md) · [Español](chatgpt/instructions.es.md)
+
+## Repository layout
 
 ```
 z-deluge-agent/
 ├── .claude-plugin/marketplace.json
-├── .cursor/skills/              ← symlinks a los 10 skills
-├── chatgpt/                     ← Custom GPT: prompt + manifest
-├── docs/                        ← referencia exhaustiva
-├── plugins/z-deluge-agent/      ← plugin + skills fuente
-└── README.md
+├── .cursor/skills/              ← symlinks to the 10 skills
+├── chatgpt/                     ← Custom GPT prompt + manifest
+├── claude/                      ← local plugin upload guide
+├── docs/en/  docs/es/           ← bilingual reference
+├── plugins/z-deluge-agent/      ← plugin + skills
+├── README.md                    ← English
+└── README.es.md                 ← Spanish
 ```
 
-## Fuentes oficiales
+## Official sources
 
 - Deluge: https://www.zoho.com/deluge/help/
 - CRM Developer: https://www.zohocrm.dev/

@@ -1,79 +1,83 @@
-# Índice de documentación — Zoho Deluge Agent
+# Documentation index — Zoho Deluge Agent
 
-Referencia estructurada del ecosistema Zoho para agentes y desarrolladores. Organizada en **10 dominios** alineados 1:1 con los skills del plugin.
+Structured Zoho ecosystem reference for agents and developers. **10 domains**, 1:1 with plugin skills.
 
-## 1. Deluge (lenguaje)
-
-| Documento | Skill | Contenido |
-|-----------|-------|-----------|
-| [deluge/language.md](deluge/language.md) | `zoho-deluge-core` | Sintaxis, tipos, operadores, funciones, invokeUrl, variables zoho.* |
-
-## 2. Deluge en Zoho Creator
-
-| Documento | Skill | Contenido |
-|-----------|-------|-----------|
-| [creator/deluge-in-creator.md](creator/deluge-in-creator.md) | `zoho-deluge-creator` | Formularios, páginas, subforms, Custom APIs, API v2.1 |
-
-## 3. Client Scripts CRM
-
-| Documento | Skill | Contenido |
-|-----------|-------|-----------|
-| [client-script/crm.md](client-script/crm.md) | `zoho-crm-client-script` | Eventos, Client API (ZDK), Web API, ZRC |
-
-## 4. COQL (CRM)
-
-| Documento | Skill | Contenido |
-|-----------|-------|-----------|
-| [coql/crm-coql.md](coql/crm-coql.md) | `zoho-crm-coql` | Sintaxis COQL, límites, scopes, invokeUrl, errores |
-
-## 5. Widgets CRM
-
-| Documento | Skill | Contenido |
-|-----------|-------|-----------|
-| [widgets/crm.md](widgets/crm.md) | `zoho-widgets-crm` | ZohoEmbededAppSDK, PageLoad, CRM.API, despliegue |
-
-## 6. Widgets Creator
-
-| Documento | Skill | Contenido |
-|-----------|-------|-----------|
-| [widgets/creator.md](widgets/creator.md) | `zoho-widgets-creator` | widgetsdk, manifest CREATOR, ZOHO.CREATOR.API, zet pack |
-
-## 7. Integration tasks (`zoho.*`)
-
-| Documento | Skill | Contenido |
-|-----------|-------|-----------|
-| [integration-tasks/index.md](integration-tasks/index.md) | `zoho-integration-tasks` | ~260 tasks en 24 servicios Zoho |
-
-## 8. APIs REST públicas
-
-| Documento | Skill | Contenido |
-|-----------|-------|-----------|
-| [apis/crm-v8.md](apis/crm-v8.md) | `zoho-public-apis` | CRM v8 CRUD, bulk, settings (COQL → skill coql) |
-| [apis/books.md](apis/books.md) | `zoho-public-apis` | Books API v3 |
-| [apis/desk.md](apis/desk.md) | `zoho-public-apis` | Desk API v1 |
-| [apis/other-products.md](apis/other-products.md) | `zoho-public-apis` | Inventory, People, Projects, Sign, Billing, etc. |
-
-## 9. Analytics SQL
-
-| Documento | Skill | Contenido |
-|-----------|-------|-----------|
-| [analytics/sql.md](analytics/sql.md) | `zoho-analytics-sql` | SQL en Zoho Analytics, JOINs, window functions, CloudSQL API |
-
-## 10. Patrones y calidad
-
-| Documento | Skill | Contenido |
-|-----------|-------|-----------|
-| [patterns/production.md](patterns/production.md) | `zoho-patterns` | Null safety, límites API, gotchas, troubleshooting |
+**Languages:** [English](en/) · [Español](es/)
 
 ---
 
-## Documento legacy (referencia cruzada)
+## 1. Deluge (language)
 
-| Documento | Nota |
-|-----------|------|
-| [widgets/crm-creator.md](widgets/crm-creator.md) | Documento combinado original — preferir `widgets/crm.md` y `widgets/creator.md` |
+| EN | ES | Skill |
+|----|----|-------|
+| [en/deluge/language.md](en/deluge/language.md) | [es/deluge/language.md](es/deluge/language.md) | `zoho-deluge-core` |
 
-## Mapa skill → docs
+## 2. Deluge in Zoho Creator
+
+| EN | ES | Skill |
+|----|----|-------|
+| [en/creator/deluge-in-creator.md](en/creator/deluge-in-creator.md) | [es/creator/deluge-in-creator.md](es/creator/deluge-in-creator.md) | `zoho-deluge-creator` |
+
+## 3. CRM Client Scripts
+
+| EN | ES | Skill |
+|----|----|-------|
+| [en/client-script/crm.md](en/client-script/crm.md) | [es/client-script/crm.md](es/client-script/crm.md) | `zoho-crm-client-script` |
+
+## 4. COQL (CRM)
+
+| EN | ES | Skill |
+|----|----|-------|
+| [en/coql/crm-coql.md](en/coql/crm-coql.md) | [es/coql/crm-coql.md](es/coql/crm-coql.md) | `zoho-crm-coql` |
+
+## 5. CRM Widgets
+
+| EN | ES | Skill |
+|----|----|-------|
+| [en/widgets/crm.md](en/widgets/crm.md) | [es/widgets/crm.md](es/widgets/crm.md) | `zoho-widgets-crm` |
+
+## 6. Creator Widgets
+
+| EN | ES | Skill |
+|----|----|-------|
+| [en/widgets/creator.md](en/widgets/creator.md) | [es/widgets/creator.md](es/widgets/creator.md) | `zoho-widgets-creator` |
+
+## 7. Integration tasks (`zoho.*`)
+
+| EN | ES | Skill |
+|----|----|-------|
+| [en/integration-tasks/index.md](en/integration-tasks/index.md) | [es/integration-tasks/index.md](es/integration-tasks/index.md) | `zoho-integration-tasks` |
+
+## 8. Public REST APIs
+
+| EN | ES | Skill |
+|----|----|-------|
+| [en/apis/crm-v8.md](en/apis/crm-v8.md) | [es/apis/crm-v8.md](es/apis/crm-v8.md) | `zoho-public-apis` |
+| [en/apis/books.md](en/apis/books.md) | [es/apis/books.md](es/apis/books.md) | `zoho-public-apis` |
+| [en/apis/desk.md](en/apis/desk.md) | [es/apis/desk.md](es/apis/desk.md) | `zoho-public-apis` |
+| [en/apis/other-products.md](en/apis/other-products.md) | [es/apis/other-products.md](es/apis/other-products.md) | `zoho-public-apis` |
+
+## 9. Analytics SQL
+
+| EN | ES | Skill |
+|----|----|-------|
+| [en/analytics/sql.md](en/analytics/sql.md) | [es/analytics/sql.md](es/analytics/sql.md) | `zoho-analytics-sql` |
+
+## 10. Patterns and quality
+
+| EN | ES | Skill |
+|----|----|-------|
+| [en/patterns/production.md](en/patterns/production.md) | [es/patterns/production.md](es/patterns/production.md) | `zoho-patterns` |
+
+---
+
+## Legacy
+
+| ES | Note |
+|----|------|
+| [es/widgets/crm-creator.md](es/widgets/crm-creator.md) | Combined original — prefer `widgets/crm.md` and `widgets/creator.md` |
+
+## Skill → docs map
 
 ```
 zoho-deluge-core        → deluge/
@@ -87,3 +91,5 @@ zoho-public-apis        → apis/
 zoho-analytics-sql      → analytics/
 zoho-patterns           → patterns/
 ```
+
+Prefix with `docs/en/` or `docs/es/`.

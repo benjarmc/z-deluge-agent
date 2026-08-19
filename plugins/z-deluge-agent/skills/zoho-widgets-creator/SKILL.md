@@ -1,13 +1,20 @@
 ---
 name: zoho-widgets-creator
-description: Crea, revisa y depura widgets personalizados HTML/JS embebidos en Zoho Creator. Usar cuando el usuario menciona widget Creator, plugin-manifest.json CREATOR, widgetsdk-min.js, ZOHO.CREATOR.API, ZOHO.CREATOR.init, zet validate, zet pack o js.zohostatic.com/creator/widgets.
+description: Creates, reviews, and debugs custom HTML/JS widgets embedded in Zoho Creator. Use for plugin-manifest.json CREATOR, widgetsdk-min.js, ZOHO.CREATOR.API, ZOHO.CREATOR.init, zet validate, zet pack, js.zohostatic.com/creator/widgets. / Crea, revisa y depura widgets HTML/JS embebidos en Zoho Creator. Usar para plugin-manifest.json CREATOR, widgetsdk, ZOHO.CREATOR.API, zet pack.
 ---
 
 # Widgets — Zoho Creator
 
+## Language / Idioma
+
+Reply in the user's language (English or Spanish). Code identifiers, API names, and Zoho product names stay in English.
+Responde en el idioma del usuario (inglés o español). Identificadores de código, nombres de API y productos Zoho permanecen en inglés.
+
+Canonical docs: `docs/en/` (English) · `docs/es/` (Español)
+
 Componentes **HTML + JavaScript** embebidos en páginas Creator.
 
-**Referencia completa:** `docs/widgets/creator.md`  
+**Referencia completa:** `docs/en/widgets/creator.md` · `docs/es/widgets/creator.md`  
 **Widgets CRM:** skill `zoho-widgets-crm` (SDK distinto)
 
 ---
@@ -245,7 +252,7 @@ function buscar() {
 
 | Tema | Archivo |
 |------|---------|
-| Widgets Creator | `docs/widgets/creator.md` |
+| Widgets Creator | `docs/en/widgets/creator.md` · `docs/es/widgets/creator.md` |
 | Deluge Creator | skill `zoho-deluge-creator` |
-| Creator API v2.1 | `docs/creator/deluge-in-creator.md` |
+| Creator API v2.1 | `docs/en/creator/deluge-in-creator.md` · `docs/es/creator/deluge-in-creator.md` |
 

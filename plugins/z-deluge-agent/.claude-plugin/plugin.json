@@ -1,7 +1,7 @@
 {
   "name": "z-deluge-agent",
-  "version": "1.1.0",
-  "description": "Documentación y skills del ecosistema Zoho: Deluge, Creator, Client Scripts CRM, COQL, Widgets CRM/Creator, Integration Tasks, APIs REST y Analytics SQL.",
+  "version": "1.2.0",
+  "description": "Zoho ecosystem documentation and skills (EN/ES): Deluge, Creator, CRM Client Scripts, COQL, CRM/Creator Widgets, Integration Tasks, REST APIs, and Analytics SQL. / Documentación y skills del ecosistema Zoho (EN/ES).",
   "author": {
     "name": "benjarmc",
     "url": "https://github.com/benjarmc/z-deluge-agent"

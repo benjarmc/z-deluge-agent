@@ -1,8 +1,8 @@
-# Referencia — zoho-deluge-creator
+# Reference / Referencia — zoho-deluge-creator
 
-| Tema | Archivo |
-|------|---------|
-| Deluge en Creator | `docs/creator/deluge-in-creator.md` |
-| Lenguaje Deluge | `docs/deluge/language.md` |
-| Patrones | `docs/patterns/production.md` |
-| Integration tasks Creator | `docs/integration-tasks/index.md` |
+| Topic / Tema | EN | ES |
+|--------------|----|----|
+| Deluge in Creator | `docs/en/creator/deluge-in-creator.md` | `docs/es/creator/deluge-in-creator.md` |
+| Deluge language / Lenguaje | `docs/en/deluge/language.md` | `docs/es/deluge/language.md` |
+| Patterns / Patrones | `docs/en/patterns/production.md` | `docs/es/patterns/production.md` |
+| Creator integration tasks | `docs/en/integration-tasks/index.md` | `docs/es/integration-tasks/index.md` |

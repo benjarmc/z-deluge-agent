@@ -13,3 +13,6 @@ node_modules/
 
 # Referencia local (no parte del proyecto)
 zoho-deluge-toolkit/
+
+# Plugin zip generated for Claude Desktop
+dist/

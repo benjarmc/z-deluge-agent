@@ -1,12 +1,19 @@
 ---
 name: zoho-deluge-creator
-description: Escribe, revisa y depura Deluge en Zoho Creator: formularios, workflows, páginas HTML, subformularios, Custom APIs, API REST v2.1, skip_workflow, record fetch, empty set, integraciones OAuth y gotchas de producción. Usar cuando el usuario menciona Zoho Creator, thisapp, openUrl, subforms, Creator pages, Custom API, creator.zoho.com/api, Form[criteria] o scripting low-code Creator.
+description: Writes, reviews, and debugs Deluge in Zoho Creator: forms, workflows, HTML pages, subforms, Custom APIs, REST API v2.1, skip_workflow, record fetch, empty set, OAuth, production gotchas. Use for Zoho Creator, thisapp, openUrl, Creator pages, creator.zoho.com/api, Form[criteria]. / Escribe, revisa y depura Deluge en Zoho Creator: formularios, workflows, páginas HTML, subformularios, Custom APIs, API REST v2.1, skip_workflow, empty set. Usar para Zoho Creator, thisapp, openUrl, páginas Creator.
 ---
 
 # Deluge en Zoho Creator
 
-**Referencia completa:** `docs/creator/deluge-in-creator.md`  
-**Patrones:** `docs/patterns/production.md`  
+## Language / Idioma
+
+Reply in the user's language (English or Spanish). Code identifiers, API names, and Zoho product names stay in English.
+Responde en el idioma del usuario (inglés o español). Identificadores de código, nombres de API y productos Zoho permanecen en inglés.
+
+Canonical docs: `docs/en/` (English) · `docs/es/` (Español)
+
+**Referencia completa:** `docs/en/creator/deluge-in-creator.md` · `docs/es/creator/deluge-in-creator.md`  
+**Patrones:** `docs/en/patterns/production.md` · `docs/es/patterns/production.md`  
 **Lenguaje base:** skill `zoho-deluge-core`
 
 ---
@@ -180,7 +187,7 @@ if(cnt > 0) {
     m = Map();
     m.put("Email", input.email);
     m.put("Nombre", input.nombre);
-    resp = zoho.creator.createRecord("mi_app", "Clientes", m);
+    resp = zoho.creator.createRecord(zoho.adminuser, zoho.appname, "Clientes", m, Map(), "creator_oauth");
     clienteId = resp.get("ID");
 }
 result = Map();
@@ -221,19 +228,20 @@ payload.put("Nombre", "Pedido 001");
 resp = invokeUrl [ url: url type: POST body: payload.toText() connection: "creator_oauth" ];
 ```
 
-Para params avanzados preferir invokeUrl sobre `zoho.creator.*` tasks.
+Para `skip_workflow` / `field_config` / `max_records` desde **otro** servicio: `zoho.creator.v2_1.*`. Desde Creator: V2 `zoho.creator.*` o `invokeUrl` v2.1. `record_cursor` sigue siendo invokeUrl.
 
 ---
 
-## zoho.creator.* tasks
+## zoho.creator.* (V2) y `zoho.creator.v2_1.*`
+
+Índices distintos: skill `zoho-integration-tasks`. V2: owner + app + form/report. Update por ID = `updateRecord`. Bulk create = `createRecord` con List (no hay `createRecords` en V2). V2.1: `createRecords` / `updateRecordById`; **no** desde Creator.
 
 ```deluge
-zoho.creator.createRecord("app", "Form", dataMap);
-zoho.creator.createRecords("app", "Form", dataList);
-zoho.creator.getRecordById("app", "Report", recordId);
-zoho.creator.getRecords("app", "Report");
-zoho.creator.updateRecordById("app", "Report", recordId, data);
-zoho.creator.updateRecords("app", "Report", updateList);
+empty = Map();
+zoho.creator.createRecord(zoho.adminuser, zoho.appname, "Form", dataMap, empty, "creator_oauth");
+zoho.creator.getRecordById(zoho.adminuser, zoho.appname, "Report", recordId, "creator_oauth");
+zoho.creator.updateRecord(zoho.adminuser, zoho.appname, "Report", recordId, data, empty, "creator_oauth");
+zoho.creator.updateRecords(zoho.adminuser, zoho.appname, "Report", "ID!=0", data, empty, "creator_oauth");
 ```
 
 Null safety Creator: validar con `!= ""` no `!= null`.
@@ -245,7 +253,8 @@ Null safety Creator: validar con `!= ""` no `!= null`.
 | ❌ No usar | ✅ Alternativa |
 |-----------|----------------|
 | Ternario `? :` | `if/else` |
-| `while` / `break` | `for each` + guard list |
+| `while` | Estático `{1,2,3}` o dinámico `"0,".repeat(n).toList(",")` |
+| Saltar / salir de `for each` | `continue;` / `break;` (oficiales) |
 | `addMonth()` inconsistente | `addDay(30)` o manual |
 | `variable = null` | flag + default |
 | Lookup por ID en criterio | `Lookup.Campo == valor` |
@@ -285,8 +294,8 @@ Null safety Creator: validar con `!= ""` no `!= null`.
 
 | Tema | Archivo |
 |------|---------|
-| Deluge en Creator | `docs/creator/deluge-in-creator.md` |
-| Lenguaje Deluge | `docs/deluge/language.md` |
-| Patrones | `docs/patterns/production.md` |
-| Integration tasks Creator | `docs/integration-tasks/index.md` § Creator |
+| Deluge en Creator | `docs/en/creator/deluge-in-creator.md` · `docs/es/creator/deluge-in-creator.md` |
+| Lenguaje Deluge | `docs/en/deluge/language.md` · `docs/es/deluge/language.md` |
+| Patrones | `docs/en/patterns/production.md` · `docs/es/patterns/production.md` |
+| Integration tasks Creator | `docs/en/integration-tasks/index.md` · `docs/es/integration-tasks/index.md` § Creator |
 

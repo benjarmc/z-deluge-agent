@@ -1,0 +1,257 @@
+---
+name: zoho-widgets-creator
+description: Creates, reviews, and debugs custom HTML/JS widgets embedded in Zoho Creator. Use for plugin-manifest.json CREATOR, widgetsdk-min.js, ZOHO.CREATOR.API, ZOHO.CREATOR.init, zet validate, zet pack, js.zohostatic.com/creator/widgets. / Crea, revisa y depura widgets HTML/JS embebidos en Zoho Creator. Usar para plugin-manifest.json CREATOR, widgetsdk, ZOHO.CREATOR.API, zet pack.
+---
+
+# Widgets — Zoho Creator
+
+## Language / Idioma
+
+Reply in the user's language (English or Spanish). Code identifiers, API names, and Zoho product names stay in English.
+Responde en el idioma del usuario (inglés o español). Identificadores de código, nombres de API y productos Zoho permanecen en inglés.
+
+Canonical docs: `docs/en/` (English) · `docs/es/` (Español)
+
+**HTML + JavaScript** components embedded in Creator pages.
+
+**Full reference:** `docs/en/widgets/creator.md` · `docs/es/widgets/creator.md`  
+**CRM widgets:** skill `zoho-widgets-crm` (different SDK)
+
+---
+
+## Required structure
+
+```
+nombre_widget/
+├── app/
+│   ├── widget.html          # Obligatorio — index
+│   ├── script.js
+│   ├── styles.css
+│   └── assets/
+├── plugin-manifest.json     # Obligatorio
+└── README.md
+```
+
+---
+
+## plugin-manifest.json
+
+```json
+{
+  "service": "CREATOR",
+  "config": [
+    {
+      "name": "report_name",
+      "type": "string",
+      "default": "All_Records",
+      "display_name": "Reporte"
+    },
+    {
+      "name": "max_rows",
+      "type": "number",
+      "default": "50"
+    }
+  ]
+}
+```
+
+`config` → editable parameters when installing the widget in Creator UI.
+
+---
+
+## SDK — widgetsdk-min.js
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://js.zohostatic.com/creator/widgets/version/1.0/widgetsdk-min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="widget-root"></div>
+    <script src="script.js"></script>
+</body>
+</html>
+```
+
+---
+
+## Initialization
+
+```javascript
+function initWidget() {
+    ZOHO.CREATOR.init().then(function(data) {
+        console.log("SDK ready:", data);
+        var params = ZOHO.CREATOR.UTIL.getWidgetParams();
+        document.getElementById("report-label").textContent = params.report_name;
+        loadRecords(params.report_name);
+    }).catch(function(err) {
+        console.error("Init error:", err);
+    });
+}
+
+if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWidget);
+} else {
+    initWidget();
+}
+```
+
+---
+
+## ZOHO.CREATOR.API
+
+### getRecordById
+
+```javascript
+ZOHO.CREATOR.API.getRecordById({
+    reportName: "All_Pedidos",
+    recordId: "66359000000015039"
+}).then(function(resp) {
+    console.log(resp.data);
+});
+```
+
+### getAllRecords
+
+```javascript
+ZOHO.CREATOR.API.getAllRecords({
+    reportName: "All_Clientes",
+    criteria: 'Status != "Closed"',
+    pageNumber: 1,
+    pageSize: 200
+}).then(function(resp) {
+    renderTable(resp.data);
+});
+```
+
+### addRecord
+
+```javascript
+ZOHO.CREATOR.API.addRecord({
+    formLinkName: "Pedidos",
+    data: { "Cliente": "Acme", "Monto": 1500 }
+});
+```
+
+### updateRecord
+
+```javascript
+ZOHO.CREATOR.API.updateRecord({
+    reportName: "All_Pedidos",
+    recordId: recordId,
+    data: { "Estado": "Aprobado" }
+});
+```
+
+### deleteRecord
+
+```javascript
+ZOHO.CREATOR.API.deleteRecord({
+    reportName: "All_Pedidos",
+    criteria: "ID == 66359000000015039"
+});
+```
+
+### uploadFile
+
+```javascript
+ZOHO.CREATOR.API.uploadFile({
+    reportName: "Documentos",
+    recordId: recordId,
+    fieldName: "Adjunto",
+    file: fileInput.files[0]
+});
+```
+
+---
+
+## Read manifest config
+
+```javascript
+ZOHO.CREATOR.init().then(function() {
+    var cfg = ZOHO.CREATOR.UTIL.getWidgetParams();
+    var report = cfg.report_name || "All_Records";
+    var maxRows = parseInt(cfg.max_rows) || 50;
+});
+```
+
+---
+
+## Deploy with zet CLI
+
+```bash
+cd nombre_widget
+zet validate    # validar estructura
+zet pack        # genera dist/nombre_widget.zip
+```
+
+Creator installation:
+1. Settings → Widgets → Create
+2. Hosting: Internal
+3. Upload the ZIP from `dist/`
+4. Index file: `/widget.html`
+
+---
+
+## Example — search a report
+
+```html
+<script>
+let recordOps = null;
+ZOHO.CREATOR.init().then(function() {
+    recordOps = ZOHO.CREATOR.API;
+    document.getElementById("btnBuscar").addEventListener("click", buscar);
+});
+function buscar() {
+    var term = document.getElementById("q").value;
+    recordOps.getAllRecords({
+        reportName: "Mi_Reporte",
+        criteria: 'Nombre == "' + term + '"'
+    }).then(function(resp) {
+        var html = resp.data.map(function(r) {
+            return "<div>" + r.Nombre + "</div>";
+        }).join("");
+        document.getElementById("resultados").innerHTML = html;
+    }).catch(function(e) { console.error(e); });
+}
+</script>
+```
+
+---
+
+## Creator widget gotchas
+
+| Problem | Fix |
+|----------|-----|
+| SDK undefined | Script in `<head>` before app |
+| init() fail | Verify manifest service: CREATOR |
+| Empty data | reportName/formLinkName case-sensitive |
+| criteria syntax | Creator quotes: `'Campo == "valor"'` |
+| ZIP reject | `zet validate` before pack |
+| Config undefined | Define in manifest + getWidgetParams() |
+
+---
+
+## Creator vs CRM widgets
+
+| | Creator | CRM |
+|--|---------|-----|
+| Manifest | Required CREATOR | Not required |
+| SDK | widgetsdk-min.js | ZohoEmbededAppSDK |
+| Deploy | zet pack + ZIP | Direct HTML |
+| Events | init() promise | PageLoad event |
+| Deluge functions | via external Custom API | FUNCTIONS.execute |
+
+---
+
+## Full reference
+
+| Topic | File |
+|------|---------|
+| Creator widgets | `docs/en/widgets/creator.md` · `docs/es/widgets/creator.md` |
+| Creator Deluge | skill `zoho-deluge-creator` |
+| Creator API v2.1 | `docs/en/creator/deluge-in-creator.md` · `docs/es/creator/deluge-in-creator.md` |

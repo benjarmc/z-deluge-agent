@@ -1,13 +1,20 @@
 ---
 name: zoho-patterns
-description: Aplica patrones de producción, null safety, límites API, paginación, cross-app sync y troubleshooting en código Zoho (Deluge, CRM, Creator, Books). Usar al revisar código existente, depurar errores en producción, diseñar integraciones cross-app o cuando aparecen errores como empty set, INVALID_OAUTHTOKEN, TOO_MANY_REQUESTS o Comparison of non numeric expression.
+description: Applies production patterns, null safety, API limits, pagination, cross-app sync and troubleshooting in Zoho code (Deluge, CRM, Creator, Books). Use when reviewing production code or errors like empty set, INVALID_OAUTHTOKEN, TOO_MANY_REQUESTS, Comparison of non numeric expression. / Aplica patrones de producción, null safety, límites API, paginación y troubleshooting. Usar al revisar código o errores empty set, INVALID_OAUTHTOKEN, TOO_MANY_REQUESTS.
 ---
 
 # Patrones de producción — Zoho
 
+## Language / Idioma
+
+Reply in the user's language (English or Spanish). Code identifiers, API names, and Zoho product names stay in English.
+Responde en el idioma del usuario (inglés o español). Identificadores de código, nombres de API y productos Zoho permanecen en inglés.
+
+Canonical docs: `docs/en/` (English) · `docs/es/` (Español)
+
 Patrones battle-tested para código Deluge e integraciones Zoho en producción.
 
-**Referencia completa:** `docs/patterns/production.md`
+**Referencia completa:** `docs/en/patterns/production.md` · `docs/es/patterns/production.md`
 
 ---
 
@@ -113,28 +120,59 @@ Creator criterios: keywords (`today`, `this week`) o string dd-MMM-yyyy.
 
 ---
 
-## Paginación universal
+## Paginación — bucle dinámico (preferido)
+
+Cuando conoces el total (o un techo), genera exactamente N iteraciones. Evita `while`.
+
+```deluge
+batchSize = 100;
+total = fullList.toList().size();
+numOfPages = (total / batchSize).ceil();
+lst_pageLoop = "0,".repeat(numOfPages).toList(",");
+for each index pageNumber in lst_pageLoop
+{
+    offset = pageNumber * batchSize;
+    // procesar lote: fullList desde offset, batchSize registros
+}
+```
+
+N fijo y pequeño: `for each i in {1,2,3,4,5,6} { }`.
+
+### Paginación CRM cuando el total no se conoce de antemano
 
 ```deluge
 pagina = 1;
 porPagina = 200;
 todos = list();
 hayMas = true;
+maxPages = 50;
+lst_pageLoop = "0,".repeat(maxPages).toList(",");
 
-for each i in "".leftpad(49).toList("") {
-    if(!hayMas) { break; }
-    resp = zoho.crm.getRecords("Contacts", pagina, porPagina);
-    data = resp.get("data");
-    if(data == null || data.size() == 0) { hayMas = false; }
-    else {
-        todos.addAll(data);
-        if(data.size() < porPagina) { hayMas = false; }
-        else { pagina = pagina + 1; }
+for each index pageNumber in lst_pageLoop
+{
+    if(hayMas)
+    {
+        resp = zoho.crm.getRecords("Contacts", pagina, porPagina);
+        data = resp.get("data");
+        if(data == null || data.size() == 0)
+        {
+            hayMas = false;
+        }
+        else
+        {
+            todos.addAll(data);
+            if(data.size() < porPagina)
+            {
+                hayMas = false;
+            }
+            else
+            {
+                pagina = pagina + 1;
+            }
+        }
     }
 }
 ```
-
-Max ~10,000 con guardia 50 páginas.
 
 ---
 
@@ -173,7 +211,7 @@ Siempre idempotente: buscar antes de duplicar.
 - Pre-filtrar en query Creator
 - Extraer campos una vez por iteración
 - Evitar múltiples `.get()` anidados sin guard
-- Batch con bulkCreateRecords cuando aplique
+- Batch con `zoho.crm.v8.bulkCreate` (máx. 100). Legado: `bulkCreateRecords`
 
 ---
 
@@ -190,7 +228,7 @@ jsonStr = "{\"data\": [{\"id\": \"" + id + "\"}]}";
 ## External calls en loops
 
 Cada integration task = 1 external call. Diseñar:
-- Paginación con guardia
+- Paginación con bucle dinámico (`"0,".repeat(n).toList(",")`) o estático (`{1,2,3,...}`)
 - Bulk endpoints cuando existan
 - Custom API Creator para batch server-side
 - Cola/async para volúmenes altos
@@ -219,7 +257,7 @@ Cada integration task = 1 external call. Diseñar:
 | INVALID_OAUTHTOKEN | Token expirado | Refresh OAuth |
 | TOO_MANY_REQUESTS | Rate limit | Backoff, cola, Custom API |
 | Function specified in criteria has returned null | .get() en null / Map anidado | ifNull, containsKey |
-| Improper Statement | Ternario/while/null rvalue | if/else, for each |
+| Improper Statement | Ternario/while/null rvalue | if/else; bucle estático `{1,2,3}` o dinámico `"0,".repeat(n).toList(",")` |
 | Error updating field in ZC_SUBFORM | Edit subform en Validate | On User Input |
 | Type mismatch | Number vs string ID | `.toString()` |
 | JSON parse error API | toString() en body | `.toText()` |
@@ -247,6 +285,6 @@ Cada integration task = 1 external call. Diseñar:
 
 | Tema | Archivo |
 |------|---------|
-| Patrones producción | `docs/patterns/production.md` |
+| Patrones producción | `docs/en/patterns/production.md` · `docs/es/patterns/production.md` |
 | Índice docs | `docs/INDEX.md` |
 

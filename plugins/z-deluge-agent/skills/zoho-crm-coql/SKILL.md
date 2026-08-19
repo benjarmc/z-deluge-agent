@@ -1,12 +1,19 @@
 ---
 name: zoho-crm-coql
-description: Consulta y depura COQL (CRM Object Query Language) en Zoho CRM v8. Usar para select_query, POST /coql, joins lookup, agregados GROUP BY, paginación OFFSET, scope ZohoCRM.coql.READ, invokeUrl COQL desde Deluge, errores INVALID_QUERY o cuando el usuario menciona COQL, CRM query language o búsquedas SQL-like en CRM.
+description: Queries and debugs COQL (CRM Object Query Language) in Zoho CRM v8. Use for select_query, POST /coql, lookup joins, GROUP BY, OFFSET pagination, ZohoCRM.coql.READ, invokeUrl COQL, INVALID_QUERY, SQL-like CRM searches. / Consulta y depura COQL en Zoho CRM v8. Usar para select_query, POST /coql, joins lookup, GROUP BY, OFFSET, ZohoCRM.coql.READ, errores INVALID_QUERY.
 ---
 
 # COQL — Zoho CRM Object Query Language
 
-**Referencia completa:** `docs/coql/crm-coql.md`  
-**CRM REST general:** `docs/apis/crm-v8.md` (sin COQL profundo)  
+## Language / Idioma
+
+Reply in the user's language (English or Spanish). Code identifiers, API names, and Zoho product names stay in English.
+Responde en el idioma del usuario (inglés o español). Identificadores de código, nombres de API y productos Zoho permanecen en inglés.
+
+Canonical docs: `docs/en/` (English) · `docs/es/` (Español)
+
+**Referencia completa:** `docs/en/coql/crm-coql.md` · `docs/es/coql/crm-coql.md`  
+**CRM REST general:** `docs/en/apis/crm-v8.md` · `docs/es/apis/crm-v8.md` (sin COQL profundo)  
 **OAuth/invokeUrl:** skill `zoho-public-apis`
 
 COQL es el lenguaje SQL-like para consultar registros CRM vía `POST /crm/v8/coql`.
@@ -185,30 +192,37 @@ if(data != null && data.size() > 0) {
 
 ## Paginación COQL
 
+Bucle **dinámico** (sin `while`). Techo de páginas si el total no se conoce:
+
 ```deluge
 offset = 0;
 limit = 200;
 allRecs = List();
 more = true;
+maxPages = 50;
+lst_pageLoop = "0,".repeat(maxPages).toList(",");
 
-for each i in "".leftpad(49).toList("") {
-    if(!more) { break; }
-    q = "select id, Last_Name from Contacts where Email is not null limit " + limit + " offset " + offset;
-    b = Map();
-    b.put("select_query", q);
-    r = invokeUrl [
-        url: "https://www.zohoapis.com/crm/v8/coql"
-        type: POST
-        body: b.toText()
-        headers: {"Content-Type": "application/json"}
-        connection: "zoho_crm"
-    ];
-    batch = r.get("data");
-    if(batch == null || batch.size() == 0) { more = false; }
-    else {
-        for each rec in batch { allRecs.add(rec); }
-        if(batch.size() < limit) { more = false; }
-        else { offset = offset + limit; }
+for each index pageNumber in lst_pageLoop
+{
+    if(more)
+    {
+        q = "select id, Last_Name from Contacts where Email is not null limit " + limit + " offset " + offset;
+        b = Map();
+        b.put("select_query", q);
+        r = invokeUrl [
+            url: "https://www.zohoapis.com/crm/v8/coql"
+            type: POST
+            body: b.toText()
+            headers: {"Content-Type": "application/json"}
+            connection: "zoho_crm"
+        ];
+        batch = r.get("data");
+        if(batch == null || batch.size() == 0) { more = false; }
+        else {
+            for each rec in batch { allRecs.add(rec); }
+            if(batch.size() < limit) { more = false; }
+            else { offset = offset + limit; }
+        }
     }
 }
 ```
@@ -256,7 +270,7 @@ ZohoCRM.modules.deals.READ
 
 | Tema | Archivo |
 |------|---------|
-| COQL completo | `docs/coql/crm-coql.md` |
-| CRM v8 REST | `docs/apis/crm-v8.md` |
-| Patrones paginación | `docs/patterns/production.md` |
+| COQL completo | `docs/en/coql/crm-coql.md` · `docs/es/coql/crm-coql.md` |
+| CRM v8 REST | `docs/en/apis/crm-v8.md` · `docs/es/apis/crm-v8.md` |
+| Patrones paginación | `docs/en/patterns/production.md` · `docs/es/patterns/production.md` |
 

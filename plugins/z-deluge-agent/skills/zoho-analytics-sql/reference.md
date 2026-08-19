@@ -1,7 +1,7 @@
-# Referencia — zoho-analytics-sql
+# Reference / Referencia — zoho-analytics-sql
 
-| Tema | Archivo |
-|------|---------|
-| Analytics SQL | `docs/analytics/sql.md` |
-| Integration tasks Analytics | `docs/integration-tasks/index.md` |
-| Patrones | `docs/patterns/production.md` |
+| Topic / Tema | EN | ES |
+|--------------|----|----|
+| Analytics SQL | `docs/en/analytics/sql.md` | `docs/es/analytics/sql.md` |
+| Analytics integration tasks | `docs/en/integration-tasks/index.md` | `docs/es/integration-tasks/index.md` |
+| Patterns / Patrones | `docs/en/patterns/production.md` | `docs/es/patterns/production.md` |

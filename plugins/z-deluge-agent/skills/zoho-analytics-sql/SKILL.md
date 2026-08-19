@@ -1,13 +1,20 @@
 ---
 name: zoho-analytics-sql
-description: Escribe, revisa y depura consultas SQL en Zoho Analytics: funciones fecha/string/numéricas, JOINs, window functions, Query Tables, limitaciones CTE/subqueries, CloudSQL API REST, JDBC. Usar cuando el usuario menciona Zoho Analytics SQL, Query Table, window_sum, CloudSQL API, ZOHO_SQLQUERY o análisis BI en Analytics.
+description: Writes, reviews, and debugs SQL in Zoho Analytics: date/string/numeric functions, JOINs, window functions, Query Tables, CTE/subquery limits, CloudSQL REST API, JDBC. Use for Zoho Analytics SQL, Query Table, window_sum, CloudSQL API, ZOHO_SQLQUERY. / Escribe, revisa y depura SQL en Zoho Analytics: funciones fecha/string/numéricas, JOINs, window functions, Query Tables, CloudSQL API, ZOHO_SQLQUERY.
 ---
 
 # Zoho Analytics SQL
 
+## Language / Idioma
+
+Reply in the user's language (English or Spanish). Code identifiers, API names, and Zoho product names stay in English.
+Responde en el idioma del usuario (inglés o español). Identificadores de código, nombres de API y productos Zoho permanecen en inglés.
+
+Canonical docs: `docs/en/` (English) · `docs/es/` (Español)
+
 Consultas SQL en Zoho Analytics: Query Tables, reportes y CloudSQL API.
 
-**Referencia completa:** `docs/analytics/sql.md`  
+**Referencia completa:** `docs/en/analytics/sql.md` · `docs/es/analytics/sql.md`  
 **Integration tasks Deluge:** `zoho.analytics.*` en skill `zoho-integration-tasks`  
 **REST Analytics v2:** skill `zoho-public-apis`
 
@@ -310,7 +317,7 @@ GROUP BY "CustomerID";
 
 | Tema | Archivo |
 |------|---------|
-| Analytics SQL | `docs/analytics/sql.md` |
-| CloudSQL API | docs/analytics/sql.md § API |
-| Patrones | `docs/patterns/production.md` |
+| Analytics SQL | `docs/en/analytics/sql.md` · `docs/es/analytics/sql.md` |
+| CloudSQL API | `docs/en/analytics/sql.md` · `docs/es/analytics/sql.md` § API |
+| Patrones | `docs/en/patterns/production.md` · `docs/es/patterns/production.md` |
 

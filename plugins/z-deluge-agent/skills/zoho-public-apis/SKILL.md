@@ -1,17 +1,24 @@
 ---
 name: zoho-public-apis
-description: Integra y depura APIs REST públicas de Zoho vía OAuth 2.0 e invokeUrl. Usar para CRM API v8 CRUD/bulk/settings, Books v3, Desk v1, Inventory, People, Projects, Sign, Billing, OAuth scopes, paginación REST, regiones data center o arquitectura server-to-server. Para COQL profundo usar skill zoho-crm-coql; para Analytics SQL usar zoho-analytics-sql.
+description: Integrates and debugs public Zoho REST APIs via OAuth 2.0 and invokeUrl. Use for CRM API v8 CRUD/bulk/settings, Books v3, Desk v1, Inventory, People, Projects, Sign, Billing, OAuth scopes, REST pagination, data-center regions. For deep COQL use zoho-crm-coql; for Analytics SQL use zoho-analytics-sql. / Integra y depura APIs REST públicas de Zoho vía OAuth 2.0 e invokeUrl. Para COQL profundo usar zoho-crm-coql; para Analytics SQL usar zoho-analytics-sql.
 ---
 
 # APIs REST públicas — Zoho
 
+## Language / Idioma
+
+Reply in the user's language (English or Spanish). Code identifiers, API names, and Zoho product names stay in English.
+Responde en el idioma del usuario (inglés o español). Identificadores de código, nombres de API y productos Zoho permanecen en inglés.
+
+Canonical docs: `docs/en/` (English) · `docs/es/` (Español)
+
 Integración server-side vía OAuth 2.0 + invokeUrl (Deluge) o HTTP directo.
 
 **Referencias:**
-- CRM v8 → `docs/apis/crm-v8.md`
-- Books → `docs/apis/books.md`
-- Desk → `docs/apis/desk.md`
-- Otros → `docs/apis/other-products.md`
+- CRM v8 → `docs/en/apis/crm-v8.md` · `docs/es/apis/crm-v8.md`
+- Books → `docs/en/apis/books.md` · `docs/es/apis/books.md`
+- Desk → `docs/en/apis/desk.md` · `docs/es/apis/desk.md`
+- Otros → `docs/en/apis/other-products.md` · `docs/es/apis/other-products.md`
 
 **COQL:** skill `zoho-crm-coql` — no duplicar aquí.  
 **Analytics SQL:** skill `zoho-analytics-sql`.
@@ -118,7 +125,7 @@ Body: {"select_query": "select id, Email from Contacts limit 200"}
 Scope: ZohoCRM.coql.READ
 ```
 
-→ Detalle completo en skill `zoho-crm-coql` y `docs/coql/crm-coql.md`
+→ Detalle completo en skill `zoho-crm-coql` y `docs/en/coql/crm-coql.md` · `docs/es/coql/crm-coql.md`
 
 ### Lookup en payload
 
@@ -158,7 +165,7 @@ Módulos: Contacts, Invoices, Estimates, Items, Bills, Expenses, CreditNotes, Sa
 
 Custom fields en `custom_field_hash` — validar con `containsKey()`.
 
-Detalle: `docs/apis/books.md`
+Detalle: `docs/en/apis/books.md` · `docs/es/apis/books.md`
 
 ---
 
@@ -177,7 +184,7 @@ GET   /contacts
 POST  /contacts
 ```
 
-Detalle: `docs/apis/desk.md`
+Detalle: `docs/en/apis/desk.md` · `docs/es/apis/desk.md`
 
 ---
 
@@ -208,13 +215,15 @@ Params: `skip_workflow`, `field_config`, `max_records`, `record_cursor`
 | Recruit v2 | `recruit.zoho.com/recruit/v2/` | other-products.md |
 | Sign v1 | `sign.zoho.com/api/v1/` | other-products.md |
 | Billing v1 | `/billing/v1/` | other-products.md |
-| WorkDrive v1 | `/workdrive/api/v1/` | other-products.md |
+| WorkDrive v1 | `/workdrive/api/v1/` | other-products.md — GET files: header `Accept: application/vnd.api+json` |
 | Analytics v2 | `analyticsapi.zoho.com/api/v2/` | analytics/sql.md |
 | Bookings v1 | `bookings.zoho.com/api/v1/` | other-products.md |
 
 ---
 
 ## Patrón invokeUrl (Deluge)
+
+Para APIs **Zoho↔Zoho** preferir `invokeapi` (solo `path` + `service`) — skill `zoho-deluge-core`. URL completa o API externa → `invokeUrl`.
 
 ```deluge
 resp = invokeUrl [
@@ -244,23 +253,63 @@ resp = invokeUrl [
 
 Usar `connection:` para OAuth. Body JSON: `.toText()` siempre.
 
+### WorkDrive REST — header `Accept`
+
+Algunos GET de WorkDrive (`/files/{id}`, listados) esperan JSON:API. Sin el header la respuesta falla o no parsea:
+
+```deluge
+header = Map();
+header.put("Accept", "application/vnd.api+json");
+uri = "https://www.zohoapis.eu/workdrive/api/v1/files/" + resource_id;
+response = invokeurl
+[
+	url :uri
+	type :GET
+	headers:header
+	connection:"workdrive"
+];
+```
+
+Dominio según DC (`.com` / `.eu` / `.in`). Las tasks `zoho.workdrive.*` no lo necesitan.
+
 ---
 
 ## Paginación REST
 
+Total conocido → bucle **dinámico**. N fijo → lista literal. Sin `while`.
+
 ```deluge
+batchSize = 100;
+total = fullList.toList().size();
+numOfPages = (total / batchSize).ceil();
+lst_pageLoop = "0,".repeat(numOfPages).toList(",");
+for each index pageNumber in lst_pageLoop
+{
+    offset = pageNumber * batchSize;
+}
+
 page = 1;
 perPage = 200;
 allData = List();
+maxPages = 50;
+lst_pageLoop = "0,".repeat(maxPages).toList(",");
+hayMas = true;
 
-for each i in "".leftpad(49).toList("") {
-    url = "https://www.zohoapis.com/crm/v8/Contacts?page=" + page + "&per_page=" + perPage;
-    resp = invokeUrl [ url: url type: GET connection: "zoho_crm" ];
-    batch = resp.get("data");
-    if(batch == null || batch.size() == 0) { break; }
-    for each rec in batch { allData.add(rec); }
-    if(batch.size() < perPage) { break; }
-    page = page + 1;
+for each index pageNumber in lst_pageLoop
+{
+    if(hayMas)
+    {
+        url = "https://www.zohoapis.com/crm/v8/Contacts?page=" + page + "&per_page=" + perPage;
+        resp = invokeUrl [ url: url type: GET connection: "zoho_crm" ];
+        batch = resp.get("data");
+        if(batch == null || batch.size() == 0) { hayMas = false; }
+        else
+        {
+            for each rec in batch { allData.add(rec); }
+            if(batch.size() < perPage) { hayMas = false; }
+            else { page = page + 1; }
+        }
+    }
 }
 ```
 
@@ -294,10 +343,10 @@ Ver skill `zoho-integration-tasks`.
 
 | Tema | Archivo |
 |------|---------|
-| CRM v8 | `docs/apis/crm-v8.md` |
-| COQL | `docs/coql/crm-coql.md` |
-| Books | `docs/apis/books.md` |
-| Desk | `docs/apis/desk.md` |
-| Otros productos | `docs/apis/other-products.md` |
-| Patrones | `docs/patterns/production.md` |
+| CRM v8 | `docs/en/apis/crm-v8.md` · `docs/es/apis/crm-v8.md` |
+| COQL | `docs/en/coql/crm-coql.md` · `docs/es/coql/crm-coql.md` |
+| Books | `docs/en/apis/books.md` · `docs/es/apis/books.md` |
+| Desk | `docs/en/apis/desk.md` · `docs/es/apis/desk.md` |
+| Otros productos | `docs/en/apis/other-products.md` · `docs/es/apis/other-products.md` |
+| Patrones | `docs/en/patterns/production.md` · `docs/es/patterns/production.md` |
 
