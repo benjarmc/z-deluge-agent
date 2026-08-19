@@ -77,7 +77,7 @@ Vuelve a subir el zip (o desinstala la versión anterior e instala la nueva).
 | Formato | Solo `.zip` — si tienes `.plugin`, renómbralo a `.zip` |
 | Docs `docs/` | No van en el zip; el contenido operativo está en cada `SKILL.md`. Para referencia larga, usa un Proyecto con `docs/es/` o `docs/en/` |
 | Marketplace GitHub | Alternativa: `/plugin marketplace add benjarmc/z-deluge-agent` en Claude Code |
-| 10 skills | Ver tabla en `README.es.md` |
+| 10 skills | Ver tabla en `README.md` |
 
 ## Troubleshooting
 
