@@ -41,7 +41,7 @@ docs/
     ├── coql/crm-coql.md
     ├── widgets/crm.md | creator.md
     ├── integration-tasks/index.md
-    ├── apis/crm-v8.md | books.md | desk.md | other-products.md
+    ├── apis/crm-v8.md | crm-rest-versions.md | books.md | desk.md | other-products.md
     ├── analytics/sql.md
     └── patterns/production.md
 ```

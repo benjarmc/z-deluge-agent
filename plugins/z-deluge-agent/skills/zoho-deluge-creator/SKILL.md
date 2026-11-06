@@ -201,14 +201,18 @@ Scope OAuth: `ZohoCreator.customapi.EXECUTE`
 
 ## API REST v2.1 (invokeUrl)
 
-Base: `https://creator.zoho.com/api/v2.1/{owner}/{app}/`
+Base OpenAPI: `https://www.zohoapis.com/creator/v2.1/` (DC: `.eu`, `.in`, `.com.au`, `.jp`, `.ca`, `.sa`).
 
 ```
-POST   /form/{formLinkName}           ← crear (max 200/request)
-GET    /report/{reportLinkName}       ← listar
-PATCH  /report/{reportLinkName}       ← actualizar (requiere criteria)
-POST   /custom/{customApiName}        ← Custom API
+POST   /data/{owner}/{app}/form/{form}                 ← crear (max 200/request)
+GET    /data/{owner}/{app}/report/{report}             ← listar
+PATCH  /data/{owner}/{app}/report/{report}             ← actualizar (requiere criteria)
+GET    /meta/{owner}/{app}/forms
+POST   /bulk/{owner}/{app}/report/{report}/read
+POST   /publish/{owner}/{app}/form/{form}              ← publicado, sin OAuth de usuario
 ```
+
+Custom API sigue en `https://creator.zoho.com/api/v2.1/{owner}/{app}/custom/{api_name}`. Detalle: `docs/en/creator/deluge-in-creator.md`.
 
 Parámetros query clave:
 - `skip_workflow=form_workflow` — suprime On Success/Validate
@@ -222,7 +226,7 @@ Subforms: array de maps anidados
 Créditos: GET/POST = 1; operaciones pesadas = 5+
 
 ```deluge
-url = "https://creator.zoho.com/api/v2.1/owner/app/form/Pedidos?skip_workflow=form_workflow";
+url = "https://www.zohoapis.com/creator/v2.1/data/owner/app/form/Pedidos?skip_workflow=form_workflow";
 payload = Map();
 payload.put("Nombre", "Pedido 001");
 resp = invokeUrl [ url: url type: POST body: payload.toText() connection: "creator_oauth" ];

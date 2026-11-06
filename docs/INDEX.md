@@ -53,6 +53,7 @@ Structured Zoho ecosystem reference for agents and developers. **10 domains**, 1
 | EN | ES | Skill |
 |----|----|-------|
 | [en/apis/crm-v8.md](en/apis/crm-v8.md) | [es/apis/crm-v8.md](es/apis/crm-v8.md) | `zoho-public-apis` |
+| [en/apis/crm-rest-versions.md](en/apis/crm-rest-versions.md) | [es/apis/crm-rest-versions.md](es/apis/crm-rest-versions.md) | `zoho-public-apis` |
 | [en/apis/books.md](en/apis/books.md) | [es/apis/books.md](es/apis/books.md) | `zoho-public-apis` |
 | [en/apis/desk.md](en/apis/desk.md) | [es/apis/desk.md](es/apis/desk.md) | `zoho-public-apis` |
 | [en/apis/other-products.md](en/apis/other-products.md) | [es/apis/other-products.md](es/apis/other-products.md) | `zoho-public-apis` |

@@ -140,6 +140,48 @@ PATCH requiere `criteria` explícito — omitirlo no actualiza todo, devuelve er
 
 ---
 
+## REST API v2.1 (OpenAPI)
+
+> **Fuente:** OpenAPI de Zoho Creator API v2 (revisada 2026-11-06).  
+> **Base:** `https://www.zohoapis.com/creator/v2.1/` (también `.eu`, `.in`, `.com.au`, `.jp`, `.ca`, `.sa`).  
+> Los paths de abajo son relativos a esa base. `{owner}` es el dueño de la cuenta, `{app}` el link name de la app.
+
+```
+GET    /meta/applications
+GET    /meta/{owner}/applications
+GET    /meta/{owner}/{app}/forms
+GET    /meta/{owner}/{app}/forms/{form}/fields
+GET    /meta/{owner}/{app}/reports
+GET    /meta/{owner}/{app}/pages
+GET    /meta/{owner}/{app}/sections
+
+POST   /data/{owner}/{app}/form/{form}                         ← agregar records
+GET    /data/{owner}/{app}/report/{report}                     ← listar
+GET    /data/{owner}/{app}/report/{report}/{record_ID}         ← obtener
+PATCH  /data/{owner}/{app}/report/{report}                     ← actualizar por criteria
+PATCH  /data/{owner}/{app}/report/{report}/{record_ID}
+DELETE /data/{owner}/{app}/report/{report}
+DELETE /data/{owner}/{app}/report/{report}/{record_ID}
+
+POST   /data/{owner}/{app}/report/{report}/{record_ID}/{field}/upload
+GET    /data/{owner}/{app}/report/{report}/{record_ID}/{field}/download
+
+POST   /bulk/{owner}/{app}/report/{report}/read                ← job de bulk read
+GET    /bulk/{owner}/{app}/report/{report}/read/{job_ID}
+GET    /bulk/{owner}/{app}/report/{report}/read/{job_ID}/result
+POST   /bulk/{owner}/{app}/form/{form}/insert                  ← subir archivo de bulk insert
+PUT    /bulk/{owner}/{app}/form/{form}/insert/{job_ID}         ← iniciar o abortar
+GET    /bulk/{owner}/{app}/form/{form}/insert/{job_ID}/result
+
+POST   /publish/{owner}/{app}/form/{form}                      ← form publicado, sin usuario OAuth
+GET    /publish/{owner}/{app}/report/{report}
+GET    /publish/{owner}/{app}/report/{report}/{record_ID}
+```
+
+Los records se crean en el **form** y se leen o actualizan en el **report**. Los Custom API (`/custom/{api_name}`) son otra superficie, aparte de esta spec.
+
+---
+
 ## Gotchas exclusivos de Creator
 
 - Sin operador ternario (`? :`) — usar `if/else`

@@ -5,7 +5,7 @@
 > **Official source:** https://www.zoho.com/crm/developer/docs/api/v8/  
 > **Base URL:** `https://www.zohoapis.com/crm/v8/`  
 > **Authentication:** OAuth 2.0 (`Authorization: Zoho-oauthtoken {token}`)  
-> **Current version:** v8 (2024-2025) — v2, v5, v6, v7 are also available
+> **Current version:** v8 (2024-2025). v2 through v8, plus GraphQL: [crm-rest-versions.md](crm-rest-versions.md).
 
 ---
 
@@ -442,6 +442,45 @@ if (data != null && data.size() > 0) {
 | C# | zohocrm/zohocrm-csharp-sdk-v8 |
 | Ruby | zohocrm/zohocrm-ruby-sdk-v8 |
 | JavaScript (Browser) | zohocrm/zohocrm-js-sdk |
+
+---
+
+## From the v7 and v8 collections
+
+Paths below are on `/crm/v8/`. The version they first appear in is in [crm-rest-versions.md](crm-rest-versions.md).
+
+```
+POST   /{module}/{id}/actions/clone
+GET    /__apis
+POST   /settings/tags/actions/mass_delete
+GET    /settings/automation/cadences
+POST   /{module}/actions/enrol_in_cadences
+POST   /{module}/actions/unenrol_from_cadences
+GET    /settings/fields/{field_id}/pick_list_values
+POST   /settings/audit_log_export
+GET    /__zia_org_enrichment
+GET    /__zia_people_enrichment
+GET    /settings/zia/data_enrichment
+
+GET    /settings/automation/workflow_rules
+POST   /settings/automation/workflow_rules
+GET    /settings/automation/field_updates
+GET    /settings/automation/webhooks
+GET    /settings/automation/email_notifications
+GET    /settings/automation/tasks
+GET    /settings/automation/assignment_thresholds
+GET    /settings/connected_workflows
+GET    /settings/data_sharing
+GET    /settings/data_sharing/rules
+GET    /settings/call_preferences
+GET    /{module}/{id}/__email_drafts
+GET    /{module}/{id}/actions/fetch_full_data
+POST   /{module}/actions/permit_threshold
+POST   /{module}/actions/share_emails
+POST   /{module}/{id}/actions/get_related_records_count
+```
+
+`duplicate_check_preference` is GET, POST, PATCH, and DELETE under `/settings/duplicate_check_preference`.
 
 ---
 

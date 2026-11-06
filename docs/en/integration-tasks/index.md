@@ -595,6 +595,8 @@ resp = invokeUrl [
     type:       GET
     connection: "zoho_crm_connection"
 ];
+// connection is a quoted literal, never a variable:
+// connection: "connection_name"
 
 // With query string parameters
 params = Map();

@@ -1440,6 +1440,18 @@ response = invokeUrl
 info response;
 ```
 
+`connection` is resolved when the script is **saved**, not at runtime. The name must be a string literal in double quotes. A variable is rejected.
+
+```deluge
+connection: "connection_name"
+
+// This does not compile:
+// connName = "connection_name";
+// connection: connName
+```
+
+The same rule applies to `invokeapi`.
+
 ### invokeAPI — Zoho-to-Zoho APIs
 
 Unlike `invokeUrl`, you pass only the **path**. The domain comes from the data center. [invokeAPI](https://www.zoho.com/deluge/help/webhook/invokeapitask.html)

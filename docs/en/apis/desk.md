@@ -3,6 +3,7 @@
 > Language: English. Spanish: see the matching path under docs/es/.
 
 > **Official source:** https://desk.zoho.com/DeskAPIDocument  
+> **OpenAPI:** https://github.com/zoho/zohodesk-oas (`v1.0`, reviewed 2026-11-06)
 > **Base URL:** `https://desk.zoho.com/api/v1/`  
 > **Required headers:** `Authorization: Zoho-oauthtoken {token}` + `orgId: {org_id}`  
 > **Limit:** API credits by edition (see credits section)
@@ -350,6 +351,36 @@ DELETE /webhooks/{webhook_id}
 Available events: `ticket.created`, `ticket.updated`, `ticket.statusChanged`, `contact.created`, `contact.updated`, `agent.created`, `agent.updated`, `account.created`
 
 ---
+
+## Also in zohodesk-oas
+
+Same base `/api/v1/` and the `orgId` header. The repo has ~180 resources; these are the ones not listed above.
+
+```
+GET    /contracts
+POST   /contracts
+GET    /sla
+POST   /sla
+GET    /blueprints
+GET    /roundRobinRules
+GET    /directAssignmentRules
+GET    /channels
+POST   /recycleBin/restore
+GET    /ticketTags
+POST   /closeTickets
+GET    /myPendingApprovals
+GET    /myActiveTimers
+POST   /bulkExport
+
+GET    /communityTopics
+GET    /communityCategory
+GET    /helpCenters
+GET    /im/sessions
+GET    /sandbox
+GET    /zohoFinance/{financeService}/invoices
+```
+
+Ticket, contact, account, agent, article, and activity paths above stay the working set. Use the OAS when you need comments, attachments, followers, or time entries on those modules.
 
 ## invokeUrl example from Deluge
 

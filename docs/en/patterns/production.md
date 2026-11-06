@@ -170,6 +170,21 @@ resp = invokeUrl [
 ];
 ```
 
+### `connection` must be a quoted literal
+
+Deluge binds `connection` at save time. Do not assign the link name to a variable.
+
+```deluge
+// ✅
+connection: "connection_name"
+
+// ❌ rejected
+connName = "connection_name";
+connection: connName
+```
+
+Same rule on `invokeapi`.
+
 ### Updating Lookup Fields in CRM
 
 ```deluge

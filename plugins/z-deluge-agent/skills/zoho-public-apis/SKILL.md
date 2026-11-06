@@ -1,6 +1,6 @@
 ---
 name: zoho-public-apis
-description: Integrates and debugs public Zoho REST APIs via OAuth 2.0 and invokeUrl. Use for CRM API v8 CRUD/bulk/settings, Books v3, Desk v1, Inventory, People, Projects, Sign, Billing, OAuth scopes, REST pagination, data-center regions. For deep COQL use zoho-crm-coql; for Analytics SQL use zoho-analytics-sql. / Integra y depura APIs REST públicas de Zoho vía OAuth 2.0 e invokeUrl. Para COQL profundo usar zoho-crm-coql; para Analytics SQL usar zoho-analytics-sql.
+description: Integrates and debugs public Zoho REST APIs via OAuth 2.0 and invokeUrl. Use for CRM API v8 and v2–v8 CRUD/bulk/settings, CRM GraphQL, Books v3, Desk v1, Inventory, People, Projects, Sign, Billing, OAuth scopes, REST pagination, data-center regions. For deep COQL use zoho-crm-coql; for Analytics SQL use zoho-analytics-sql. / Integra y depura APIs REST públicas de Zoho vía OAuth 2.0 e invokeUrl. CRM v8 y v2–v8, GraphQL de CRM, Books, Desk. Para COQL profundo usar zoho-crm-coql; para Analytics SQL usar zoho-analytics-sql.
 ---
 
 # APIs REST públicas — Zoho
@@ -16,6 +16,7 @@ Integración server-side vía OAuth 2.0 + invokeUrl (Deluge) o HTTP directo.
 
 **Referencias:**
 - CRM v8 → `docs/en/apis/crm-v8.md` · `docs/es/apis/crm-v8.md`
+- CRM v2–v8 y GraphQL → `docs/en/apis/crm-rest-versions.md` · `docs/es/apis/crm-rest-versions.md`
 - Books → `docs/en/apis/books.md` · `docs/es/apis/books.md`
 - Desk → `docs/en/apis/desk.md` · `docs/es/apis/desk.md`
 - Otros → `docs/en/apis/other-products.md` · `docs/es/apis/other-products.md`
@@ -161,7 +162,7 @@ PUT  /invoices/{id}?organization_id={orgId}
 POST /invoices/{id}/status/sent?organization_id={orgId}
 ```
 
-Módulos: Contacts, Invoices, Estimates, Items, Bills, Expenses, CreditNotes, SalesOrders, PurchaseOrders...
+Módulos: Contacts, Invoices, Estimates, Retainer Invoices, Recurring Invoices/Bills/Expenses, Delivery Challans, Purchase Returns, Items, Bills, Expenses, Credit Notes, Sales Orders, Purchase Orders, Fixed Assets, Bank Transactions. OpenAPI de Books (45 módulos) resumido en la doc.
 
 Custom fields en `custom_field_hash` — validar con `containsKey()`.
 
@@ -251,11 +252,13 @@ resp = invokeUrl [
 ];
 ```
 
-Usar `connection:` para OAuth. Body JSON: `.toText()` siempre.
+Usar `connection:` para OAuth. El nombre es un **literal entre comillas** (`connection: "connection_name"`). No se asigna a una variable: Deluge lo resuelve al guardar. Body JSON: `.toText()` siempre.
+
+Mapa CRM v2–v8 y GraphQL: `docs/en/apis/crm-rest-versions.md` · `docs/es/apis/crm-rest-versions.md`. Base `https://www.zohoapis.com/crm/v2/` … `/crm/v8/`. GraphQL: `POST /crm/graphql` (antes `POST /crm/graphql/actions/enable`).
 
 ### WorkDrive REST — header `Accept`
 
-Algunos GET de WorkDrive (`/files/{id}`, listados) esperan JSON:API. Sin el header la respuesta falla o no parsea:
+Algunos GET de WorkDrive (`/api/v1/files/{id}`, listados) esperan JSON:API. Sin el header la respuesta falla o no parsea. Búsqueda: `GET /api/v1/teams/{team_id}/records`. Descarga: `GET /v1/workdrive/download/{resource_id}` (fuera de `/api/v1/`).
 
 ```deluge
 header = Map();

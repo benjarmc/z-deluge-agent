@@ -43,6 +43,7 @@ Si la pregunta cruza dominios (ej. Deluge Creator que llama COQL), combina las r
 
 ### Deluge / invokeUrl
 - JSON en body: **`.toText()`**, nunca `.toString()`
+- `connection` en `invokeUrl` / `invokeapi`: literal entre comillas `connection: "connection_name"`. Una variable no compila.
 - CRM IDs: siempre **string** en comparaciones
 - CRM update lookup: `{"id": "66359000000015039"}` no el nombre
 - Creator empty set: `.count()` inline antes de asignar query a variable

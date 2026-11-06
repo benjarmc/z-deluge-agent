@@ -11,7 +11,8 @@
 
 > **URL Base:** `https://www.zohoapis.com/inventory/v1/`  
 > **Auth:** OAuth 2.0  
-> **Parámetro obligatorio:** `?organization_id={orgId}`
+> **Parámetro obligatorio:** `?organization_id={orgId}`  
+> **OpenAPI:** 40 specs de módulos de Inventory (revisadas 2026-11-06). Los paths de abajo siguen esas specs.
 
 ### Scopes
 ```
@@ -52,39 +53,34 @@ POST   /salesorders
 GET    /salesorders/{so_id}
 PUT    /salesorders/{so_id}
 DELETE /salesorders/{so_id}
-POST   /salesorders/{so_id}/confirmed
-POST   /salesorders/{so_id}/closed
-POST   /salesorders/{so_id}/void
-POST   /salesorders/{so_id}/email
-POST   /salesorders/{so_id}/packages      ← crear paquete de envío
-GET    /salesorders/{so_id}/packages
+POST   /salesorders/{salesorder_id}/status/confirmed
+POST   /salesorders/{salesorder_id}/status/void
+POST   /salesorders/{salesorder_id}/submit
+POST   /salesorders/{salesorder_id}/approve
 
 GET    /packages
 POST   /packages
 GET    /packages/{package_id}
 PUT    /packages/{package_id}
 DELETE /packages/{package_id}
-POST   /packages/{package_id}/shipments   ← crear envío
 
-GET    /shipments
-POST   /shipments
-GET    /shipments/{shipment_id}
-PUT    /shipments/{shipment_id}
+POST   /shipmentorders
+GET    /shipmentorders/{shipmentorder_id}
+PUT    /shipmentorders/{shipmentorder_id}
+DELETE /shipmentorders/{shipmentorder_id}
+POST   /shipmentorders/{shipmentorder_id}/status/delivered
 
 GET    /invoices
 POST   /invoices
 GET    /invoices/{invoice_id}
 PUT    /invoices/{invoice_id}
 DELETE /invoices/{invoice_id}
-POST   /invoices/{invoice_id}/email
 
 GET    /purchaseorders
 POST   /purchaseorders
 GET    /purchaseorders/{po_id}
 PUT    /purchaseorders/{po_id}
 DELETE /purchaseorders/{po_id}
-POST   /purchaseorders/{po_id}/issued
-POST   /purchaseorders/{po_id}/billed
 
 GET    /bills
 POST   /bills
@@ -92,17 +88,49 @@ GET    /bills/{bill_id}
 PUT    /bills/{bill_id}
 DELETE /bills/{bill_id}
 
-GET    /warehouses
-POST   /warehouses
-GET    /warehouses/{warehouse_id}
-PUT    /warehouses/{warehouse_id}
+POST   /settings/locations/enable
+POST   /locations
+GET    /locations
+GET    /locations/{location_id}
+POST   /locations/{location_id}/markasprimary
 
-GET    /taxes
-POST   /taxes
-GET    /taxes/{tax_id}
-PUT    /taxes/{tax_id}
-DELETE /taxes/{tax_id}
+GET    /settings/taxes
+POST   /settings/taxes
+GET    /settings/taxes/{tax_id}
+PUT    /settings/taxes/{tax_id}
+DELETE /settings/taxes/{tax_id}
 ```
+
+Operaciones de stock y almacén de la misma spec:
+
+```
+POST   /inventoryadjustments
+POST   /inventoryadjustments/{id}/approve
+POST   /transferorders
+POST   /transferorders/{id}/markastransferred
+POST   /transferorders/{id}/intransit
+POST   /compositeitems
+POST   /bundles
+POST   /bundles/{id}/bundled
+POST   /purchasereceives
+POST   /purchasereceives/{id}/setstatusasreceived
+POST   /salesreturns
+POST   /salesreturnreceives
+POST   /picklists
+POST   /moveorders
+POST   /moveorders/{id}/markascompleted
+POST   /putaways
+POST   /items/batches
+GET    /items/serialnumbers
+POST   /units
+POST   /unitgroups
+POST   /deliverychallans
+POST   /retainerinvoices
+POST   /purchasereturns
+GET    /replenishments
+```
+
+En esta spec no hay `/warehouses` ni `/shipments`. Las locations reemplazan a los warehouses. Los envíos son `/shipmentorders`. Confirmar una sales order es `POST /salesorders/{id}/status/confirmed`.
 
 ### Desde Deluge (task nativa)
 ```deluge
@@ -510,8 +538,9 @@ resp = invokeUrl [
 
 ## Zoho WorkDrive API v1
 
-> **URL Base:** `https://www.zohoapis.com/workdrive/api/v1/`  
-> **Auth:** OAuth 2.0
+> **URL Base:** `https://www.zohoapis.com/workdrive`  
+> **Auth:** OAuth 2.0  
+> **Spec:** OpenAPI JSON de WorkDrive (revisada 2026-11-06). Las respuestas son JSON:API.
 
 ### Scopes
 ```
@@ -524,38 +553,40 @@ WorkDrive.users.READ
 ### Endpoints Principales
 
 ```
-// Team Folders
-GET    /teamfolders
-POST   /teamfolders
-GET    /teamfolders/{tf_id}
-PUT    /teamfolders/{tf_id}
-DELETE /teamfolders/{tf_id}
-GET    /teamfolders/{tf_id}/files
+POST   /api/v1/teamfolders
+GET    /api/v1/teamfolders/{teamfolder_id}
+PATCH  /api/v1/teamfolders/{teamfolder_id}
+DELETE /api/v1/teamfolders/{teamfolder_id}
+GET    /api/v1/teams/{team_id}/teamfolders
+GET    /api/v1/teamfolders/{teamfolder_id}/files
+GET    /api/v1/teamfolders/{teamfolder_id}/members
+POST   /api/v1/members
 
-// Carpetas
-POST   /files                                  ← crear carpeta
-GET    /files/{folder_id}
-PUT    /files/{folder_id}
-DELETE /files/{folder_id}
-GET    /files/{folder_id}/files               ← contenido
+POST   /api/v1/files                         ← crear carpeta o archivo Zoho
+GET    /api/v1/files/{resource_id}
+PATCH  /api/v1/files/{resource_id}
+GET    /api/v1/files/{folder_id}/files
+POST   /api/v1/files/{resource_id}/copy
 
-// Archivos
-POST   /upload                                 ← subir archivo
-GET    /files/{file_id}/download              ← descargar
-PUT    /files/{file_id}                        ← actualizar metadata
-DELETE /files/{file_id}
-POST   /files/{file_id}/copy
-POST   /files/{file_id}/move
+POST   /api/v1/upload                        ← subir archivo o nueva versión
+POST   /api/v1/uploadsession/create          ← archivo grande, luego commit
+POST   /workdrive-api/v1/stream/upload       ← upload por chunks, archivos > 250 MB
+GET    /v1/workdrive/download/{resource_id}
 
-// Compartir
-POST   /files/{file_id}/permissions
-GET    /files/{file_id}/permissions
-PUT    /files/{file_id}/permissions/{perm_id}
-DELETE /files/{file_id}/permissions/{perm_id}
+POST   /api/v1/permissions                   ← compartir
+GET    /api/v1/files/{resource_id}/permissions
+PATCH  /api/v1/permissions/{permission_id}
+DELETE /api/v1/permissions/{permission_id}
+POST   /api/v1/links                         ← link de share externo
 
-// Búsqueda
-GET    /files/search?search_string={query}
+GET    /api/v1/teams/{team_id}/records       ← búsqueda
+GET    /api/v1/users/me
+POST   /api/v1/labels
+POST   /api/v1/collections
+GET    /api/v1/changes
 ```
+
+La metadata se actualiza con `PATCH`, no con `PUT`. La spec no tiene `/files/{id}/move` ni `/files/search`. Download y el upload por chunks quedan fuera de `/api/v1/`.
 
 ### Header `Accept` (JSON:API)
 

@@ -11,7 +11,8 @@
 
 > **Base URL:** `https://www.zohoapis.com/inventory/v1/`  
 > **Auth:** OAuth 2.0  
-> **Required parameter:** `?organization_id={orgId}`
+> **Required parameter:** `?organization_id={orgId}`  
+> **OpenAPI:** 40 Inventory module specs (reviewed 2026-11-06). Paths below follow those specs.
 
 ### Scopes
 ```
@@ -52,39 +53,34 @@ POST   /salesorders
 GET    /salesorders/{so_id}
 PUT    /salesorders/{so_id}
 DELETE /salesorders/{so_id}
-POST   /salesorders/{so_id}/confirmed
-POST   /salesorders/{so_id}/closed
-POST   /salesorders/{so_id}/void
-POST   /salesorders/{so_id}/email
-POST   /salesorders/{so_id}/packages      ← create shipping package
-GET    /salesorders/{so_id}/packages
+POST   /salesorders/{salesorder_id}/status/confirmed
+POST   /salesorders/{salesorder_id}/status/void
+POST   /salesorders/{salesorder_id}/submit
+POST   /salesorders/{salesorder_id}/approve
 
 GET    /packages
 POST   /packages
 GET    /packages/{package_id}
 PUT    /packages/{package_id}
 DELETE /packages/{package_id}
-POST   /packages/{package_id}/shipments   ← create shipment
 
-GET    /shipments
-POST   /shipments
-GET    /shipments/{shipment_id}
-PUT    /shipments/{shipment_id}
+POST   /shipmentorders
+GET    /shipmentorders/{shipmentorder_id}
+PUT    /shipmentorders/{shipmentorder_id}
+DELETE /shipmentorders/{shipmentorder_id}
+POST   /shipmentorders/{shipmentorder_id}/status/delivered
 
 GET    /invoices
 POST   /invoices
 GET    /invoices/{invoice_id}
 PUT    /invoices/{invoice_id}
 DELETE /invoices/{invoice_id}
-POST   /invoices/{invoice_id}/email
 
 GET    /purchaseorders
 POST   /purchaseorders
 GET    /purchaseorders/{po_id}
 PUT    /purchaseorders/{po_id}
 DELETE /purchaseorders/{po_id}
-POST   /purchaseorders/{po_id}/issued
-POST   /purchaseorders/{po_id}/billed
 
 GET    /bills
 POST   /bills
@@ -92,17 +88,49 @@ GET    /bills/{bill_id}
 PUT    /bills/{bill_id}
 DELETE /bills/{bill_id}
 
-GET    /warehouses
-POST   /warehouses
-GET    /warehouses/{warehouse_id}
-PUT    /warehouses/{warehouse_id}
+POST   /settings/locations/enable
+POST   /locations
+GET    /locations
+GET    /locations/{location_id}
+POST   /locations/{location_id}/markasprimary
 
-GET    /taxes
-POST   /taxes
-GET    /taxes/{tax_id}
-PUT    /taxes/{tax_id}
-DELETE /taxes/{tax_id}
+GET    /settings/taxes
+POST   /settings/taxes
+GET    /settings/taxes/{tax_id}
+PUT    /settings/taxes/{tax_id}
+DELETE /settings/taxes/{tax_id}
 ```
+
+Stock and warehouse operations from the same spec:
+
+```
+POST   /inventoryadjustments
+POST   /inventoryadjustments/{id}/approve
+POST   /transferorders
+POST   /transferorders/{id}/markastransferred
+POST   /transferorders/{id}/intransit
+POST   /compositeitems
+POST   /bundles
+POST   /bundles/{id}/bundled
+POST   /purchasereceives
+POST   /purchasereceives/{id}/setstatusasreceived
+POST   /salesreturns
+POST   /salesreturnreceives
+POST   /picklists
+POST   /moveorders
+POST   /moveorders/{id}/markascompleted
+POST   /putaways
+POST   /items/batches
+GET    /items/serialnumbers
+POST   /units
+POST   /unitgroups
+POST   /deliverychallans
+POST   /retainerinvoices
+POST   /purchasereturns
+GET    /replenishments
+```
+
+There is no `/warehouses` or `/shipments` resource in this spec. Locations replace warehouses. Shipments are `/shipmentorders`. Confirming a sales order is `POST /salesorders/{id}/status/confirmed`.
 
 ### From Deluge (native task)
 ```deluge
@@ -510,8 +538,9 @@ resp = invokeUrl [
 
 ## Zoho WorkDrive API v1
 
-> **Base URL:** `https://www.zohoapis.com/workdrive/api/v1/`  
-> **Auth:** OAuth 2.0
+> **Base URL:** `https://www.zohoapis.com/workdrive`  
+> **Auth:** OAuth 2.0  
+> **Spec:** WorkDrive OpenAPI JSON (reviewed 2026-11-06). Responses are JSON:API.
 
 ### Scopes
 ```
@@ -524,38 +553,40 @@ WorkDrive.users.READ
 ### Main Endpoints
 
 ```
-// Team Folders
-GET    /teamfolders
-POST   /teamfolders
-GET    /teamfolders/{tf_id}
-PUT    /teamfolders/{tf_id}
-DELETE /teamfolders/{tf_id}
-GET    /teamfolders/{tf_id}/files
+POST   /api/v1/teamfolders
+GET    /api/v1/teamfolders/{teamfolder_id}
+PATCH  /api/v1/teamfolders/{teamfolder_id}
+DELETE /api/v1/teamfolders/{teamfolder_id}
+GET    /api/v1/teams/{team_id}/teamfolders
+GET    /api/v1/teamfolders/{teamfolder_id}/files
+GET    /api/v1/teamfolders/{teamfolder_id}/members
+POST   /api/v1/members
 
-// Folders
-POST   /files                                  ← create folder
-GET    /files/{folder_id}
-PUT    /files/{folder_id}
-DELETE /files/{folder_id}
-GET    /files/{folder_id}/files               ← contents
+POST   /api/v1/files                         ← create folder or Zoho file
+GET    /api/v1/files/{resource_id}
+PATCH  /api/v1/files/{resource_id}
+GET    /api/v1/files/{folder_id}/files
+POST   /api/v1/files/{resource_id}/copy
 
-// Files
-POST   /upload                                 ← upload file
-GET    /files/{file_id}/download              ← download
-PUT    /files/{file_id}                        ← update metadata
-DELETE /files/{file_id}
-POST   /files/{file_id}/copy
-POST   /files/{file_id}/move
+POST   /api/v1/upload                        ← upload file or new version
+POST   /api/v1/uploadsession/create          ← large file, then commit
+POST   /workdrive-api/v1/stream/upload       ← chunk upload, files > 250 MB
+GET    /v1/workdrive/download/{resource_id}
 
-// Sharing
-POST   /files/{file_id}/permissions
-GET    /files/{file_id}/permissions
-PUT    /files/{file_id}/permissions/{perm_id}
-DELETE /files/{file_id}/permissions/{perm_id}
+POST   /api/v1/permissions                   ← share
+GET    /api/v1/files/{resource_id}/permissions
+PATCH  /api/v1/permissions/{permission_id}
+DELETE /api/v1/permissions/{permission_id}
+POST   /api/v1/links                         ← external share link
 
-// Search
-GET    /files/search?search_string={query}
+GET    /api/v1/teams/{team_id}/records       ← search
+GET    /api/v1/users/me
+POST   /api/v1/labels
+POST   /api/v1/collections
+GET    /api/v1/changes
 ```
+
+Metadata updates are `PATCH`, not `PUT`. The spec has no `/files/{id}/move` and no `/files/search`. Download and chunk upload sit outside `/api/v1/`.
 
 ### Header `Accept` (JSON:API)
 

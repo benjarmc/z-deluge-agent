@@ -81,6 +81,8 @@ m.toString()  // {a=1, b=x}  ← NO JSON
 m.toText()    // {"a":1,"b":"x"}  ← invokeUrl body
 ```
 
+`connection` on `invokeUrl` / `invokeapi` is a literal: `connection: "connection_name"`. A variable does not compile.
+
 ---
 
 ## API limits

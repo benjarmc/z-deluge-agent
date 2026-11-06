@@ -170,6 +170,21 @@ resp = invokeUrl [
 ];
 ```
 
+### `connection` tiene que ir entre comillas
+
+Deluge ata `connection` al guardar. No asignes el link name a una variable.
+
+```deluge
+// ✅
+connection: "connection_name"
+
+// ❌ se rechaza
+connName = "connection_name";
+connection: connName
+```
+
+La misma regla vale en `invokeapi`.
+
 ### Actualización de Lookup Fields en CRM
 
 ```deluge

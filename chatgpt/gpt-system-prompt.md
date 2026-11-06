@@ -43,6 +43,7 @@ If a question crosses domains, combine the relevant rules.
 
 ### Deluge / invokeUrl
 - JSON body: **`.toText()`**, never `.toString()`
+- `connection` in `invokeUrl` / `invokeapi`: quoted literal `connection: "connection_name"`. A variable does not compile.
 - CRM IDs: always **string** in comparisons
 - CRM lookup update: `{"id": "66359000000015039"}` not the name
 - Creator empty set: `.count()` inline before assigning a query to a variable

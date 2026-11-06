@@ -1,6 +1,6 @@
 # Manifest de Knowledge — Custom GPT / Proyecto ChatGPT
 
-Archivos para subir como **Knowledge**. Límite Custom GPT: **20 archivos**. Esta lista usa **14** (elige **un idioma**).
+Archivos para subir como **Knowledge**. Límite Custom GPT: **20 archivos**. Esta lista usa **15** (elige **un idioma**).
 
 [English](knowledge-manifest.md)
 
@@ -24,10 +24,11 @@ Sustituye `LANG` por `es` o `en`.
 | 8 | `docs/LANG/widgets/creator.md` | Widgets Creator | Media |
 | 9 | `docs/LANG/integration-tasks/index.md` | Integration tasks (24 servicios) | Alta |
 | 10 | `docs/LANG/apis/crm-v8.md` | REST CRM v8 | Alta |
-| 11 | `docs/LANG/apis/books.md` | REST Books | Media |
-| 12 | `docs/LANG/apis/desk.md` | REST Desk | Media |
-| 13 | `docs/LANG/apis/other-products.md` | REST otros productos | Media |
-| 14 | `docs/LANG/analytics/sql.md` | Analytics SQL | Media |
+| 11 | `docs/LANG/apis/crm-rest-versions.md` | REST CRM v2–v8 y GraphQL | Alta |
+| 12 | `docs/LANG/apis/books.md` | REST Books | Media |
+| 13 | `docs/LANG/apis/desk.md` | REST Desk | Media |
+| 14 | `docs/LANG/apis/other-products.md` | REST otros productos | Media |
+| 15 | `docs/LANG/analytics/sql.md` | Analytics SQL | Media |
 
 ### No subir
 
@@ -45,14 +46,14 @@ Sustituye `LANG` por `es` o `en`.
 2. **Name:** `Zoho Deluge Agent`
 3. **Description:** Experto en Deluge, Creator, Client Scripts CRM, COQL, Widgets, APIs Zoho y Analytics SQL (EN/ES).
 4. **Instructions:** pegar [`gpt-system-prompt.es.md`](gpt-system-prompt.es.md) (español) o [`gpt-system-prompt.md`](gpt-system-prompt.md) (inglés)
-5. **Knowledge:** subir los 14 archivos de **un** idioma
+5. **Knowledge:** subir los 15 archivos de **un** idioma
 6. Guardar
 
 ## Setup Proyecto ChatGPT
 
 1. Crear proyecto **Zoho Deluge Agent**
 2. Instrucciones: pegar el system prompt
-3. Adjuntar los 14 `.md`
+3. Adjuntar los 15 `.md`
 4. Los chats nuevos heredan el conocimiento
 
 ## Si solo caben 7 archivos

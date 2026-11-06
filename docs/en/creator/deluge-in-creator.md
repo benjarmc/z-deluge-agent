@@ -140,6 +140,48 @@ PATCH requires explicit `criteria` — omitting it does not update everything; i
 
 ---
 
+## REST API v2.1 (OpenAPI)
+
+> **Source:** Zoho Creator API v2 OpenAPI (reviewed 2026-11-06).  
+> **Base:** `https://www.zohoapis.com/creator/v2.1/` (also `.eu`, `.in`, `.com.au`, `.jp`, `.ca`, `.sa`).  
+> Paths below are relative to that base. `{owner}` is the account owner, `{app}` the app link name.
+
+```
+GET    /meta/applications
+GET    /meta/{owner}/applications
+GET    /meta/{owner}/{app}/forms
+GET    /meta/{owner}/{app}/forms/{form}/fields
+GET    /meta/{owner}/{app}/reports
+GET    /meta/{owner}/{app}/pages
+GET    /meta/{owner}/{app}/sections
+
+POST   /data/{owner}/{app}/form/{form}                         ← add records
+GET    /data/{owner}/{app}/report/{report}                     ← list
+GET    /data/{owner}/{app}/report/{report}/{record_ID}         ← get
+PATCH  /data/{owner}/{app}/report/{report}                     ← update by criteria
+PATCH  /data/{owner}/{app}/report/{report}/{record_ID}
+DELETE /data/{owner}/{app}/report/{report}
+DELETE /data/{owner}/{app}/report/{report}/{record_ID}
+
+POST   /data/{owner}/{app}/report/{report}/{record_ID}/{field}/upload
+GET    /data/{owner}/{app}/report/{report}/{record_ID}/{field}/download
+
+POST   /bulk/{owner}/{app}/report/{report}/read                ← bulk read job
+GET    /bulk/{owner}/{app}/report/{report}/read/{job_ID}
+GET    /bulk/{owner}/{app}/report/{report}/read/{job_ID}/result
+POST   /bulk/{owner}/{app}/form/{form}/insert                  ← upload bulk insert file
+PUT    /bulk/{owner}/{app}/form/{form}/insert/{job_ID}         ← start or abort
+GET    /bulk/{owner}/{app}/form/{form}/insert/{job_ID}/result
+
+POST   /publish/{owner}/{app}/form/{form}                      ← published form, no OAuth user
+GET    /publish/{owner}/{app}/report/{report}
+GET    /publish/{owner}/{app}/report/{report}/{record_ID}
+```
+
+Records are added on the **form** and read or updated on the **report**. Custom API endpoints (`/custom/{api_name}`) are a separate surface from this spec.
+
+---
+
 ## Creator-only gotchas
 
 - No ternary operator (`? :`) — use `if/else`

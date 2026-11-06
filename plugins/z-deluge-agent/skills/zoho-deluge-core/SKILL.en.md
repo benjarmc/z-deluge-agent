@@ -529,6 +529,10 @@ resp = invokeUrl [
     connection: "zoho_crm_oauth"
 ];
 
+// connection is ALWAYS a literal. A variable does not compile:
+// connName = "zoho_crm_oauth";
+// connection: connName
+
 // PUT / PATCH / DELETE
 resp = invokeUrl [ url: url type: PUT body: body.toText() headers: headers ];
 ```
@@ -577,7 +581,7 @@ info response.headers;
 | `parameters` | Query string (TEXT or Map) |
 | `body` | TEXT / FILE / Map — JSON: `body: data.toString()` + `application/json` header |
 | `headers` | Map |
-| `connection` | Connection name; often required in Creator |
+| `connection` | Connection name, quoted literal (`"connection_name"`). A variable does not compile. Often required in Creator |
 | `response-format` | FILE, COLLECTION, STRING, NONE, DEFAULT |
 | `response-decoding` | Default UTF-8 |
 

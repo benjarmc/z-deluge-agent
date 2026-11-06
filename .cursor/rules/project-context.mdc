@@ -1,0 +1,75 @@
+---
+description: Mantener el contexto del proyecto en docs/CONTEXT.md (leer al empezar, crear si no existe, actualizar al cerrar)
+alwaysApply: true
+---
+
+# Contexto persistente del proyecto
+
+El contexto del proyecto vive en `docs/CONTEXT.md`, no en el historial del chat.
+Trátalo como la fuente de verdad sobre el estado del proyecto y sus decisiones.
+
+## Al iniciar una conversación
+
+1. Si `docs/CONTEXT.md` **existe**: léelo completo antes de proponer o cambiar
+   código. Si algo de lo que pide el usuario contradice lo documentado, señálalo.
+2. Si **no existe**: antes de la primera tarea, explora el repo (README,
+   manifiestos como package.json, estructura de carpetas, configuración, y la
+   salida de graphify si el proyecto la tiene) y crea `docs/CONTEXT.md` con la
+   plantilla de abajo. Documenta solo lo que puedas verificar en el código;
+   lo que no sepas (sobre todo lógica de negocio), márcalo como
+   `<!-- TODO: confirmar con el usuario -->` y pregúntalo.
+3. Si el proyecto tiene salida de graphify, úsala para entender la estructura
+   del código; no la copies en CONTEXT.md, solo referencia dónde está.
+
+## Al cerrar
+
+Actualiza `docs/CONTEXT.md` cuando:
+- el usuario diga algo como "cerramos", "guarda contexto", "terminamos por hoy", o
+- termines un cambio relevante (nueva funcionalidad, cambio de arquitectura,
+  nueva regla de negocio, decisión técnica, bug importante resuelto).
+
+Al actualizar:
+- Edita las secciones existentes; no reescribas el archivo entero ni dupliques.
+- Agrega una entrada al inicio de **Bitácora** con la fecha y un resumen breve.
+- Mueve lo terminado fuera de **Pendientes**.
+- Las decisiones van con su *por qué*.
+- Sé conciso: este archivo debe poder leerse en 2 minutos. Si la Bitácora pasa
+  de ~15 entradas, resume las más viejas en una sola línea.
+- Nunca guardes secretos, tokens, contraseñas ni datos personales de clientes.
+- Al terminar, dile al usuario en una línea qué actualizaste.
+
+## Plantilla
+
+```markdown
+# Contexto del proyecto: <nombre>
+
+_Última actualización: AAAA-MM-DD_
+
+## Qué es
+Una o dos frases: qué hace la app y para quién.
+
+## Stack y estructura
+- Tecnologías principales y versiones relevantes
+- Carpetas clave y qué contienen
+- Servicios externos / integraciones (APIs, Zoho, BD, etc.)
+- Cómo correr, probar y desplegar
+
+## Lógica de negocio
+Reglas del dominio que el código no explica por sí solo
+(cálculos, estados, permisos, flujos, excepciones).
+
+## Decisiones
+- AAAA-MM-DD — Decisión — Por qué (alternativas descartadas)
+
+## Estado actual
+Qué funciona, qué está a medias.
+
+## Pendientes
+- [ ] ...
+
+## Problemas conocidos / gotchas
+- ...
+
+## Bitácora
+- AAAA-MM-DD — Qué se hizo
+```

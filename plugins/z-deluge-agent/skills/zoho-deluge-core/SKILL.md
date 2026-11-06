@@ -531,6 +531,10 @@ resp = invokeUrl [
     connection: "zoho_crm_oauth"
 ];
 
+// connection SIEMPRE literal. Una variable no compila:
+// connName = "zoho_crm_oauth";
+// connection: connName
+
 // PUT / PATCH / DELETE
 resp = invokeUrl [ url: url type: PUT body: body.toText() headers: headers ];
 ```
@@ -579,7 +583,7 @@ info response.headers;
 | `parameters` | Query string (TEXT o Map) |
 | `body` | TEXT / FILE / Map — JSON: `body: data.toString()` + header `application/json` |
 | `headers` | Map |
-| `connection` | Nombre de conexión; en Creator a menudo obligatorio |
+| `connection` | Nombre de conexión, literal entre comillas (`"connection_name"`). Una variable no compila. En Creator a menudo obligatorio |
 | `response-format` | FILE, COLLECTION, STRING, NONE, DEFAULT |
 | `response-decoding` | Default UTF-8 |
 

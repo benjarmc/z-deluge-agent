@@ -3,6 +3,7 @@
 > Language: English. Spanish: see the matching path under docs/es/.
 
 > **Official source:** https://www.zoho.com/books/api/v3/  
+> **OpenAPI:** Zoho Books module specs (45 files, reviewed 2026-11-06). Paths below follow those specs.
 > **Base URL:** `https://www.zohoapis.com/books/v3/`  
 > **Authentication:** OAuth 2.0 (`Zoho-oauthtoken {token}`)  
 > **Required parameter on all endpoints:** `?organization_id={orgId}`  
@@ -219,7 +220,7 @@ GET    /customerpayments
 GET    /customerpayments/{payment_id}
 PUT    /customerpayments/{payment_id}
 DELETE /customerpayments/{payment_id}
-POST   /customerpayments/{payment_id}/refund
+POST   /customerpayments/{payment_id}/refunds
 ```
 
 ## Purchase Orders
@@ -359,13 +360,25 @@ POST   /bankaccounts/{account_id}/statement
 ## Bank Transactions
 
 ```
+POST   /banktransactions
 GET    /banktransactions
 GET    /banktransactions/{transaction_id}
-POST   /banktransactions/match         ← categorize transaction
-POST   /banktransactions/unmatch
-POST   /banktransactions/exclude
-POST   /banktransactions/restore
+PUT    /banktransactions/{transaction_id}
+DELETE /banktransactions/{transaction_id}
+
+GET    /banktransactions/uncategorized/{transaction_id}/match
+POST   /banktransactions/uncategorized/{transaction_id}/match
+POST   /banktransactions/{transaction_id}/unmatch
+POST   /banktransactions/uncategorized/{transaction_id}/exclude
+POST   /banktransactions/uncategorized/{transaction_id}/restore
+POST   /banktransactions/uncategorized/{transaction_id}/categorize
+POST   /banktransactions/uncategorized/{transaction_id}/categorize/expenses
+POST   /banktransactions/uncategorized/{transaction_id}/categorize/customerpayments
+POST   /banktransactions/uncategorized/{transaction_id}/categorize/vendorpayments
+POST   /banktransactions/{transaction_id}/uncategorize
 ```
+
+Rules and match filters: `/bankaccounts/rules` and `/bankaccounts/matchfilters`.
 
 ## Taxes
 
@@ -394,6 +407,104 @@ POST   /projects/{project_id}/users
 GET    /projects/{project_id}/timelogs
 POST   /projects/{project_id}/timelogs
 ```
+
+## Modules added from the OpenAPI
+
+Every call still needs `organization_id`. These resources were not in the sections above.
+
+```
+POST   /deliverychallans
+GET    /deliverychallans/{id}
+POST   /deliverychallans/{id}/status/open|delivered|returned|undelivered
+PUT    /deliverychallans/return
+PUT    /deliverychallans/undo/return
+
+POST   /recurringinvoices
+POST   /recurringinvoices/{id}/status/stop|resume
+GET    /recurringinvoices/{id}/invoices
+POST   /recurringinvoices/{id}/autobill/enable|disable
+
+POST   /recurringexpenses
+POST   /recurringexpenses/{id}/status/stop|resume
+
+POST   /recurringbills
+POST   /recurringbills/{id}/status/stop|resume
+GET    /recurring_bills/{id}          ← spec uses an underscore only on get/delete
+DELETE /recurring_bills/{id}
+
+POST   /retainerinvoices
+POST   /retainerinvoices/{id}/status/sent|void|draft
+POST   /retainerinvoices/{id}/invoices
+
+POST   /purchasereturns
+POST   /purchasereturns/{id}/status/open|void|fulfilled|unfulfilled
+PUT    /purchasereturns/status/closed|reopen
+```
+
+Customer debit notes use `/invoices` (create/list/get/update/delete). The id parameter on get, update, and delete is `debit_note_id`.
+
+Self-billed invoices (UAE) are `/bills` with `entity_type: self_billed_invoice`, plus `POST /selfbilledinvoices/{bill_id}/einvoice/push`.
+
+```
+POST   /fixedassets
+POST   /fixedassets/{id}/status/active|cancel|draft
+POST   /fixedassets/{id}/writeoff
+POST   /fixedassets/{id}/sell
+POST   /fixedassettypes
+
+POST   /basecurrencyadjustment
+POST   /basecurrencyadjustment/{id}/reevaluate
+GET    /basecurrencyadjustment/accounts
+
+POST   /tasks
+POST   /tasks/{id}/markasopen|markasongoing|markascompleted
+POST   /projects/timeentries
+POST   /projects/timeentries/{id}/timer/start
+POST   /projects/timeentries/timer/stop
+GET    /projects/timeentries/runningtimer/me
+
+POST   /users
+GET    /users/me
+POST   /users/{id}/invite|active|inactive
+
+POST   /categories
+POST   /pricebooks
+POST   /pricebooks/{id}/active|inactive
+
+POST   /settings/locations/enable
+POST   /locations
+POST   /locations/{id}/markasprimary
+
+POST   /settings/currencies
+POST   /settings/currencies/{id}/exchangerates
+
+POST   /settings/openingbalances
+POST   /openingbalances/{id}/writeoff
+
+GET    /transactionlock
+PUT    /transactionlock
+PUT    /transactionlock/partialunlock
+
+POST   /crm/account/{crm_account_id}/import
+POST   /crm/contact/{crm_contact_id}/import
+POST   /crm/vendor/{crm_vendor_id}/import
+POST   /crm/item/{crm_product_id}/import
+
+POST   /reportingtags
+POST   /reportingtags/{id}/active|inactive
+
+GET    /registers/{account_id}/transactions
+PUT    /registers/{account_id}/transactions/bulkupdate
+```
+
+Also in the spec, on modules already listed above:
+
+- Invoices: e-invoice (`/invoices/{id}/einvoice/push|cancel`), bulk `POST /invoices/submit`, `/invoices/fromestimates`, `/invoices/fromprojects`.
+- Journals: `POST /journals/{id}/status/publish`, `POST /journals/{id}/reverse`, and `/recurringjournals`.
+- Vendor credits: `POST /vendorcredits/{id}/bills` and `/refunds`.
+- Items: `/itemmasters` and `/itemvariants`.
+- Taxes: `/settings/taxgroups`, `/settings/taxauthorities`, `/settings/taxexemptions`.
+- Organizations: `/organizations/address`, `POST /organizations/{id}/inactive`.
 
 ## Reports
 
